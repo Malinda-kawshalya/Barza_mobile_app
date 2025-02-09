@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart';
-import 'helpCenter_page.dart';
+import 'screens/login_page.dart';
+import 'screens/helpCenter_page.dart';
 
 void main() {
   runApp(MyApp());
