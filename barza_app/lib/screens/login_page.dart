@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'get_started.dart';
+import 'signUp_page.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -102,7 +103,10 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context,
+                MaterialPageRoute(builder: (context) => RegistrationScreen()));
+                    },
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(

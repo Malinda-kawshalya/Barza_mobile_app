@@ -157,8 +157,8 @@ class _GetStartedPageState extends State<GetStartedPage>
                                   style: TextStyle(
                                     fontSize: 28,
                                     color: Colors.black54,
-                                    fontFamily:'po
-                                    '
+                                    fontFamily:'poppins',
+                                    
                                   ),
                                 ),
                                 AnimatedSwitcher(
@@ -250,6 +250,7 @@ class _GetStartedPageState extends State<GetStartedPage>
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
+                                fontFamily:'poppins',
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -320,6 +321,8 @@ class _GetStartedPageState extends State<GetStartedPage>
                             elevation: 0,
                           ),
                           child: const Text('Get Started Now'),
+                                        
+                          
                         ),
                       ),
                     ),
