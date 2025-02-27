@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/login_page.dart';
 import 'screens/helpCenter_page.dart';
+import 'screens/get_started.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,12 +14,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'My App',
       theme: ThemeData(
-        primaryColor: Color(0xFF0C969C), // Primary theme color
+        primaryColor: Color(0xFF0C969C),
       ),
-      initialRoute: '/login', // Set Login Page as the first screen
+      initialRoute: '/',
       routes: {
-        '/login': (context) => LoginPage(), // Login Page route
-        '/help-center': (context) => HelpCenterPage(), // Help Center Page route
+        '/': (context) => GetStartedPage(),
+        '/login': (context) => LoginPage(),
+        '/help-center': (context) => HelpCenterPage(),
       },
     );
   }

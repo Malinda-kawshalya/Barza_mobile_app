@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'get_started.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -6,6 +7,17 @@ class LoginPage extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 232, 238, 238),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Color(0xFF0C969C)),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => GetStartedPage()));
+          },
+        ),
+      ),
       backgroundColor: Color.fromARGB(255, 232, 238, 238), // Background color
       body: SafeArea(
         child: Center(
@@ -32,10 +44,12 @@ class LoginPage extends StatelessWidget {
                 TextField(
                   decoration: InputDecoration(
                     labelText: "Email",
-                    labelStyle: TextStyle(color: Color(0xFF00D1B8)), // Placeholder text color
+                    labelStyle: TextStyle(
+                        color: Color(0xFF00D1B8)), // Placeholder text color
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Color(0xFF0C969C), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xFF0C969C), width: 2),
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
@@ -44,10 +58,12 @@ class LoginPage extends StatelessWidget {
                 TextField(
                   decoration: InputDecoration(
                     labelText: "Password",
-                    labelStyle: TextStyle(color: Color(0xFF00D1B8)), // Placeholder text color
+                    labelStyle: TextStyle(
+                        color: Color(0xFF00D1B8)), // Placeholder text color
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide(color: Color(0xFF0C969C), width: 2),
+                      borderSide:
+                          BorderSide(color: Color(0xFF0C969C), width: 2),
                     ),
                   ),
                   obscureText: true,
@@ -59,7 +75,7 @@ class LoginPage extends StatelessWidget {
                     onPressed: () {},
                     child: Text(
                       "Forgot your password?",
-                      style: TextStyle(color: Color(0xFF0C969C),fontSize: 18),
+                      style: TextStyle(color: Color(0xFF0C969C), fontSize: 18),
                     ),
                   ),
                 ),
@@ -69,7 +85,8 @@ class LoginPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0C969C), // Sign-in button color
+                      backgroundColor:
+                          Color(0xFF0C969C), // Sign-in button color
                       padding: EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -93,7 +110,8 @@ class LoginPage extends StatelessWidget {
                       ),
                       side: BorderSide(color: Color(0xFF0C969C), width: 2),
                     ),
-                    child: Text("Create new account", style: TextStyle(color: Color(0xFF0C969C))),
+                    child: Text("Create new account",
+                        style: TextStyle(color: Color(0xFF0C969C))),
                   ),
                 ),
                 SizedBox(height: 20),
