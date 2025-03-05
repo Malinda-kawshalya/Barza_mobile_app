@@ -78,12 +78,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/home');
-          },
-        ),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -106,8 +100,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.pink,
-                        child:
-                            Icon(Icons.person, size: 50, color: Colors.white),
+                        child: Icon(Icons.person, size: 50, color: Colors.white),
                       ),
                       SizedBox(height: 20),
                       TextFormField(

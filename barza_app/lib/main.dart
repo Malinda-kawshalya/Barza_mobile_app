@@ -5,6 +5,7 @@ import 'screens/helpCenter_page.dart';
 import 'screens/get_started.dart';
 import 'screens/user_profile.dart';
 import 'screens/home_screen.dart';
+import 'screens/item_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/help-center': (context) => HelpCenterPage(),
         '/user-profile': (context) => UserProfileScreen(),
         '/home': (context) => HomeScreen(),
+        '/additem': (context) => AddItemScreen(),
       },
     );
   }
