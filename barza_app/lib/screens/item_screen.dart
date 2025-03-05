@@ -191,6 +191,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
       appBar: AppBar(
         title: Text('Add Barter Item'),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: _isLoading 
         ? Center(child: CircularProgressIndicator())
