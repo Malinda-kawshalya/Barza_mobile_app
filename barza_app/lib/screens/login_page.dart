@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:barza_app/screens/get_started.dart';
 import 'package:barza_app/screens/signUp_page.dart';
 import 'package:barza_app/screens/home_screen.dart';
-import '/auth_service.dart';
+import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

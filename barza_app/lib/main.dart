@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'screens/login_page.dart';
 import 'screens/helpCenter_page.dart';
 import 'screens/get_started.dart';
+import 'screens/user_profile.dart';
+import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +26,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => GetStartedPage(),
         '/login': (context) => LoginPage(),
         '/help-center': (context) => HelpCenterPage(),
+        '/user-profile': (context) => UserProfileScreen(),
+        '/home': (context) => HomeScreen(),
       },
     );
   }
