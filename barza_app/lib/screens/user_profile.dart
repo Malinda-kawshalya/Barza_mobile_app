@@ -78,13 +78,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Profile'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+        Navigator.of(context).pushReplacementNamed('/home');
+          },
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              // Navigate to login screen
-            },
+        icon: Icon(Icons.logout),
+        onPressed: () async {
+          await FirebaseAuth.instance.signOut();
+          // Navigate to login screen
+        },
           ),
         ],
       ),

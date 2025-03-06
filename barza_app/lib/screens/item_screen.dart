@@ -193,7 +193,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+        Navigator.of(context).pushReplacementNamed('/home');
+          },
         ),
       ),
       body: _isLoading 
