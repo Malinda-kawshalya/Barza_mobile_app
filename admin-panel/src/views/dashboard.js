@@ -103,7 +103,7 @@ const AdminDashboard = () => {
 
       {activeTab === 'users' && (
         <>
-          <h2 className="mb-4">User Management</h2>
+          <h2 className="mb-4">User Managements</h2>
           <div className="card">
             <div className="card-body p-0">
               {loading ? (
