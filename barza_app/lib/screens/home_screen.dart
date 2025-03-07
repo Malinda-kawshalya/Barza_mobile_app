@@ -4,7 +4,7 @@ import '../widgets/category.dart';
 //import '../widgets/items.dart';
 import '../widgets/bottom_navigationbar.dart';
 import '../widgets/menu.dart';
-//import '../screens/category_List_screen.dart';
+import 'category_screen.dart'; // Import the category screen
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -98,11 +98,12 @@ class HomeScreen extends StatelessWidget {
                         icon:
                             Icon(Icons.arrow_forward_ios, color: Colors.black),
                         onPressed: () {
-                         /* Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CategoriesScreen()),
-                          );*/
+                                builder: (context) =>
+                                    CategoryScreen()), // Use CategoryScreen
+                          );
                         },
                       ),
                     ],
@@ -127,11 +128,11 @@ class HomeScreen extends StatelessWidget {
                         icon:
                             Icon(Icons.arrow_forward_ios, color: Colors.black),
                         onPressed: () {
-                          /*Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CategoriesScreen()),
-                          );*/
+                          );
                         },
                       ),
                     ],
