@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import '../widgets/bottom_navigationbar.dart'; // Import the CustomBottomNavBar
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
   CategoryScreen({super.key});
 
+  @override
+  _CategoryScreenState createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
   final List<Map<String, String>> categories = [
     {"name": "Cloths", "image": "assets/catedory/category of Cloths.jpg"},
     {
@@ -28,6 +33,32 @@ class CategoryScreen extends StatelessWidget {
       "image": "assets/catedory/category of Gym Equipment.png"
     },
   ];
+
+  late List<Map<String, String>> filteredCategories;
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    filteredCategories = categories;
+    searchController.addListener(_filterCategories);
+  }
+
+  @override
+  void dispose() {
+    searchController.removeListener(_filterCategories);
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterCategories() {
+    String query = searchController.text.toLowerCase();
+    setState(() {
+      filteredCategories = categories.where((category) {
+        return category['name']!.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
 
   void _navigateToPage(BuildContext context, int index) {
     String routeName = '';
@@ -80,6 +111,7 @@ class CategoryScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             TextField(
+              controller: searchController,
               decoration: InputDecoration(
                 hintText: 'Search more Category ...',
                 prefixIcon: Icon(Icons.search),
@@ -97,11 +129,11 @@ class CategoryScreen extends StatelessWidget {
                   mainAxisSpacing: 10,
                   childAspectRatio: 0.9,
                 ),
-                itemCount: categories.length,
+                itemCount: filteredCategories.length,
                 itemBuilder: (context, index) {
                   return CategoryCard(
-                    imageUrl: categories[index]['image']!,
-                    title: categories[index]['name']!,
+                    imageUrl: filteredCategories[index]['image']!,
+                    title: filteredCategories[index]['name']!,
                   );
                 },
               ),
