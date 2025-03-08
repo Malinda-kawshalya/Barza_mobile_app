@@ -7,6 +7,7 @@ import 'screens/user_profile.dart';
 import 'screens/home_screen.dart';
 import 'screens/item_screen.dart';
 import 'screens/category_screen.dart';
+import 'screens/settings_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/additem': (context) => AddItemScreen(),
         '/category': (context) => CategoryScreen(),
+        '/settings': (context) => SettingsPage(),
       },
     );
   }

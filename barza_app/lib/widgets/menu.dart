@@ -79,7 +79,7 @@ class MenuWidget extends StatelessWidget {
             title: Text('Settings'),
             onTap: () {
               Navigator.pop(context); // Close the drawer
-              // Navigate to settings screen
+              Navigator.pushReplacementNamed(context, '/settings');
             },
           ),
           ListTile(
