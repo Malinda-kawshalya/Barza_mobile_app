@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../widgets/bottom_navigationbar.dart'; // Import the CustomBottomNavBar
 
 class CategoryScreen extends StatelessWidget {
+  CategoryScreen({super.key});
+
   final List<Map<String, String>> categories = [
     {"name": "Cloths", "image": "assets/images/cloths.jpg"},
     {"name": "Electronics", "image": "assets/images/electronics.jpg"},
@@ -13,6 +16,26 @@ class CategoryScreen extends StatelessWidget {
     {"name": "Toys", "image": "assets/images/gym_equipment.jpg"},
     {"name": "Gym Equipment", "image": "assets/images/gym_equipment.jpg"},
   ];
+
+  void _navigateToPage(BuildContext context, int index) {
+    String routeName = '';
+
+    if (index == 0) {
+      routeName = '/home';
+    } else if (index == 1) {
+      routeName = '/category';
+    } else if (index == 2) {
+      routeName = '/additem';
+    } else if (index == 3) {
+      routeName = '/wishlist';
+    } else if (index == 4) {
+      routeName = '/user-profile';
+    }
+
+    if (ModalRoute.of(context)?.settings.name != routeName) {
+      Navigator.pushReplacementNamed(context, routeName);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,19 +97,9 @@ class CategoryScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.grey,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.category), label: 'Categories'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'My Cart'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: 'Wishlist'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: 1, // Highlight 'Category'
+        onItemTapped: (index) => _navigateToPage(context, index),
       ),
     );
   }

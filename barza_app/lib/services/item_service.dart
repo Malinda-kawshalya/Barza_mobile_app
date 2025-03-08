@@ -17,9 +17,10 @@ class BarterItemService {
     List<String> imageUrls = [];
     try {
       for (var image in images) {
-        final fileName = 'item_images/${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}';
+        final fileName =
+            'item_images/${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}';
         final storageRef = _storage.ref().child(fileName);
-        
+
         final uploadTask = await storageRef.putFile(image);
         final downloadUrl = await uploadTask.ref.getDownloadURL();
         imageUrls.add(downloadUrl);
@@ -35,9 +36,10 @@ class BarterItemService {
   Future<String?> uploadVideo(File? videoFile) async {
     if (videoFile == null) return null;
     try {
-      final fileName = 'item_videos/${DateTime.now().millisecondsSinceEpoch}_${videoFile.path.split('/').last}';
+      final fileName =
+          'item_videos/${DateTime.now().millisecondsSinceEpoch}_${videoFile.path.split('/').last}';
       final storageRef = _storage.ref().child(fileName);
-      
+
       final uploadTask = await storageRef.putFile(videoFile);
       return await uploadTask.ref.getDownloadURL();
     } catch (e) {
@@ -72,7 +74,7 @@ class BarterItemService {
 
       // Upload images
       final imageUrls = await uploadImages(images);
-      
+
       // Upload video
       final videoUrl = await uploadVideo(videoFile);
 
@@ -97,11 +99,13 @@ class BarterItemService {
       );
 
       // Add to Firestore
-      final docRef = await _firestore.collection('barter_items').add(barterItem.toFirestore());
-      
+      final docRef = await _firestore
+          .collection('barter_items')
+          .add(barterItem.toFirestore());
+
       // Update the item with its Firestore document ID
       barterItem.id = docRef.id;
-      
+
       return barterItem;
     } catch (e) {
       debugPrint('Add Barter Item Error: $e');
@@ -111,13 +115,13 @@ class BarterItemService {
 
   // Get all active barter items
   Stream<List<BarterItem>> getActiveBarterItems() {
-    return _firestore.collection('barter_items')
+    return _firestore
+        .collection('barter_items')
         .where('status', isEqualTo: 'active')
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) => 
-          snapshot.docs.map((doc) => BarterItem.fromFirestore(doc)).toList()
-        );
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => BarterItem.fromFirestore(doc)).toList());
   }
 
   // Get user's barter items
@@ -127,21 +131,22 @@ class BarterItemService {
       return Stream.value([]);
     }
 
-    return _firestore.collection('barter_items')
+    return _firestore
+        .collection('barter_items')
         .where('userId', isEqualTo: user.uid)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) => 
-          snapshot.docs.map((doc) => BarterItem.fromFirestore(doc)).toList()
-        );
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => BarterItem.fromFirestore(doc)).toList());
   }
 
   // Update barter item status
   Future<bool> updateBarterItemStatus(String itemId, String status) async {
     try {
-      await _firestore.collection('barter_items').doc(itemId).update({
-        'status': status
-      });
+      await _firestore
+          .collection('barter_items')
+          .doc(itemId)
+          .update({'status': status});
       return true;
     } catch (e) {
       debugPrint('Update Barter Item Status Error: $e');
@@ -163,12 +168,13 @@ class BarterItemService {
   // Search barter items
   Future<List<BarterItem>> searchBarterItems(String query) async {
     try {
-      final snapshot = await _firestore.collection('barter_items')
-        .where('status', isEqualTo: 'active')
-        .where('itemName', isGreaterThanOrEqualTo: query)
-        .where('itemName', isLessThan: query + 'z')
-        .get();
-      
+      final snapshot = await _firestore
+          .collection('barter_items')
+          .where('status', isEqualTo: 'active')
+          .where('itemName', isGreaterThanOrEqualTo: query)
+          .where('itemName', isLessThan: query + 'z')
+          .get();
+
       return snapshot.docs.map((doc) => BarterItem.fromFirestore(doc)).toList();
     } catch (e) {
       debugPrint('Search Barter Items Error: $e');
