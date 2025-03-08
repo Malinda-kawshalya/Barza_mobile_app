@@ -20,36 +20,32 @@ const AdminDashboard = () => {
 
   // Fetch users from Firebase when component mounts
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const db = getFirestore();
-        const usersCollection = collection(db, 'users');
-        const userSnapshot = await getDocs(usersCollection);
-        
-        const usersList = userSnapshot.docs.map(doc => {
-          const userData = doc.data();
-          return {
-            id: doc.id,
-            name: userData.name || `${userData.firstName || ''} ${userData.lastName || ''}`.trim(),
-            items: userData.items?.length || 0,
-            trades: userData.trades?.length || 0,
-            rating: userData.rating || 0,
-            status: userData.status || 'active',
-            // Add any other fields you need
-          };
-        });
-        
-        setUsers(usersList);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  console.log("Fetching users...");
 
-    fetchUsers();
-  }, []);
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      console.log("Connecting to Firestore...");
+      const db = getFirestore();
+      const usersCollection = collection(db, "users");
+      const userSnapshot = await getDocs(usersCollection);
+
+      console.log("User Data:", userSnapshot.docs.map(doc => doc.data()));
+
+      setUsers(userSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })));
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUsers();
+}, []);
+
 
   // Updated stats calculation to handle loading state
   const stats = {
@@ -99,35 +95,52 @@ const AdminDashboard = () => {
   // In the users tab section, add this:
   return (
     <div className="container">
-      {/* Your existing JSX... */}
-
-      {activeTab === 'users' && (
+      <h1>Admin Dashboard</h1>
+  
+      {loading ? (
+        <p>Loading users...</p>
+      ) : (
         <>
-          <h2 className="mb-4">User Managements</h2>
-          <div className="card">
-            <div className="card-body p-0">
-              {loading ? (
-                <div className="text-center p-4">
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                  <p className="mt-2">Loading users...</p>
-                </div>
-              ) : (
-                <div className="table-responsive">
-                  <table className="table table-hover mb-0">
-                    {/* Your existing table header and body */}
-                  </table>
-                </div>
-              )}
-            </div>
+          <p>Users Loaded: {users.length}</p>
+          <div className="table-responsive">
+            <table className="table table-hover">
+              <thead className="table-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user, index) => (
+                  <tr key={user.id}>
+                    <td>{index + 1}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>
+                      <span className={`badge ${user.status === "active" ? "bg-success" : "bg-danger"}`}>
+                        {user.status}
+                      </span>
+                    </td>
+                    <td>
+                      <button className="btn btn-warning btn-sm me-2">Edit</button>
+                      <button className="btn btn-danger btn-sm">Suspend</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}
-
-      {/* Rest of your JSX... */}
     </div>
   );
+  
+  
 };
 
 export default AdminDashboard;
