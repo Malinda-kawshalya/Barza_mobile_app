@@ -62,6 +62,16 @@ flutter:
   uses-material-design: true
   assets:
     - assets/helpcenter.png
+    - assets/catedory/category of Cloths.jpg
+    - assets/catedory/category of electronic.png
+    - assets/catedory/category of books.png
+    - assets/catedory/category of furniture.png
+    - assets/catedory/category of Watch.jpg
+    - assets/catedory/category of software.png
+    - assets/catedory/category of shoes.png
+    - assets/catedory/category of Art & Collectibles.png
+    - assets/catedory/category of Toys.png
+    - assets/catedory/category of Gym Equipment.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

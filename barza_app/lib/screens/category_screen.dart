@@ -5,16 +5,28 @@ class CategoryScreen extends StatelessWidget {
   CategoryScreen({super.key});
 
   final List<Map<String, String>> categories = [
-    {"name": "Cloths", "image": "assets/images/cloths.jpg"},
-    {"name": "Electronics", "image": "assets/images/electronics.jpg"},
-    {"name": "Books", "image": "assets/images/furniture.jpg"},
-    {"name": "Furniture", "image": "assets/images/books.jpg"},
-    {"name": "Watches", "image": "assets/images/toys.jpg"},
-    {"name": "Software licenses", "image": "assets/images/toys.jpg"},
-    {"name": "Shoes", "image": "assets/images/toys.jpg"},
-    {"name": "Art & Collectibles", "image": "assets/images/toys.jpg"},
-    {"name": "Toys", "image": "assets/images/gym_equipment.jpg"},
-    {"name": "Gym Equipment", "image": "assets/images/gym_equipment.jpg"},
+    {"name": "Cloths", "image": "assets/catedory/category of Cloths.jpg"},
+    {
+      "name": "Electronics",
+      "image": "assets/catedory/category of electronic.png"
+    },
+    {"name": "Books", "image": "assets/catedory/category of books.png"},
+    {"name": "Furniture", "image": "assets/catedory/category of furniture.png"},
+    {"name": "Watches", "image": "assets/catedory/category of Watch.jpg"},
+    {
+      "name": "Software licenses",
+      "image": "assets/catedory/category of software.png"
+    },
+    {"name": "Shoes", "image": "assets/catedory/category of shoes.png"},
+    {
+      "name": "Art & Collectibles",
+      "image": "assets/catedory/category of Art & Collectibles.png"
+    },
+    {"name": "Toys", "image": "assets/catedory/category of Toys.png"},
+    {
+      "name": "Gym Equipment",
+      "image": "assets/catedory/category of Gym Equipment.png"
+    },
   ];
 
   void _navigateToPage(BuildContext context, int index) {
@@ -144,20 +156,6 @@ class CategoryCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class CategoriesScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Categories'),
-      ),
-      body: Center(
-        child: Text('Categories Screen'),
       ),
     );
   }
