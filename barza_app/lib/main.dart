@@ -31,8 +31,7 @@ class MyApp extends StatelessWidget {
         '/user-profile': (context) => UserProfileScreen(),
         '/home': (context) => HomeScreen(),
         '/additem': (context) => AddItemScreen(),
-        '/category': (context) =>
-            CategoryScreen(), // Ensure this matches the class name
+        '/category': (context) => CategoryScreen(),
       },
     );
   }

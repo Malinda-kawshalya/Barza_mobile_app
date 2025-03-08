@@ -4,9 +4,13 @@ class CategoryScreen extends StatelessWidget {
   final List<Map<String, String>> categories = [
     {"name": "Cloths", "image": "assets/images/cloths.jpg"},
     {"name": "Electronics", "image": "assets/images/electronics.jpg"},
-    {"name": "Furniture", "image": "assets/images/furniture.jpg"},
-    {"name": "Books", "image": "assets/images/books.jpg"},
-    {"name": "Toys", "image": "assets/images/toys.jpg"},
+    {"name": "Books", "image": "assets/images/furniture.jpg"},
+    {"name": "Furniture", "image": "assets/images/books.jpg"},
+    {"name": "Watches", "image": "assets/images/toys.jpg"},
+    {"name": "Software licenses", "image": "assets/images/toys.jpg"},
+    {"name": "Shoes", "image": "assets/images/toys.jpg"},
+    {"name": "Art & Collectibles", "image": "assets/images/toys.jpg"},
+    {"name": "Toys", "image": "assets/images/gym_equipment.jpg"},
     {"name": "Gym Equipment", "image": "assets/images/gym_equipment.jpg"},
   ];
 
