@@ -45,9 +45,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   // Dropdown Lists
   final List<String> _categories = [
-    'Electronics', 'Clothing', 'Home Appliances', 
-    'Books', 'Sports Equipment', 'Furniture', 
-    'Collectibles', 'Other'
+    'Clothing', 'Electronics', 'Books', 'Furniture', 'Watches', 'Software Licenses',
+    'Shoes', 'Art & Collectibles', 'Toys', 'Gym Equipment'
   ];
 
   final List<String> _conditions = [
