@@ -11,7 +11,9 @@ class ClothingScreen extends StatelessWidget {
     List<String> imageUrls = [];
     for (var doc in querySnapshot.docs) {
       List<String> urls = List<String>.from(doc['images']);
-      imageUrls.addAll(urls);
+      if (urls.isNotEmpty) {
+        imageUrls.add(urls.first); // Add only the first image URL
+      }
     }
     return imageUrls;
   }
