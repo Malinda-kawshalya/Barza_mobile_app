@@ -96,15 +96,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
 
     // Validate image upload
-    if (_images.length < 3) {
+    for (var image in _images) {
+    if (!await image.exists()) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please upload at least 3 images'),
+          content: Text('Image file not found: ${image.path}'),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
+  }
 
     // Set loading state
     setState(() {

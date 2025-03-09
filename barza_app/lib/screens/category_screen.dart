@@ -10,28 +10,18 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   final List<Map<String, String>> categories = [
-    {"name": "Cloths", "image": "assets/catedory/category of Cloths.jpg"},
-    {
-      "name": "Electronics",
-      "image": "assets/catedory/category of electronic.png"
-    },
-    {"name": "Books", "image": "assets/catedory/category of books.png"},
-    {"name": "Furniture", "image": "assets/catedory/category of furniture.png"},
-    {"name": "Watches", "image": "assets/catedory/category of Watch.jpg"},
-    {
-      "name": "Software licenses",
-      "image": "assets/catedory/category of software.png"
-    },
-    {"name": "Shoes", "image": "assets/catedory/category of shoes.png"},
-    {
-      "name": "Art & Collectibles",
-      "image": "assets/catedory/category of Art & Collectibles.png"
-    },
-    {"name": "Toys", "image": "assets/catedory/category of Toys.png"},
-    {
-      "name": "Gym Equipment",
-      "image": "assets/catedory/category of Gym Equipment.png"
-    },
+    {"name": "Cloths", "image": "assets/category/category of Cloths.jpg"},
+    {"name": "Electronics", "image": "assets/category/category of electronic.png"},
+    {"name": "Books", "image": "assets/category/category of books.png"},
+    {"name": "Furniture", "image": "assets/category/category of furniture.png"},
+    {"name": "Watches", "image": "assets/category/category of Watch.jpg"},
+    {"name": "Software licenses", "image": "assets/category/category of software.png"},
+    {"name": "Shoes", "image": "assets/category/category of shoes.png"},
+    {"name": "Art & Collectibles", "image": "assets/category/category of Art & Collectibles.png"},
+    {"name": "Toys", "image": "assets/category/category of Toys.png"},
+    {"name": "Gym Equipment", "image": "assets/category/category of Gym Equipment.png"},
+    {"name": "Toys", "image": "assets/category/category of Toys.png"},
+    
   ];
 
   late List<Map<String, String>> filteredCategories;
@@ -88,7 +78,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/home');
+          },
         ),
         title: Text(
           'Category',

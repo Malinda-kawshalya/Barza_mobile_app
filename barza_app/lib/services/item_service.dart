@@ -17,24 +17,28 @@ class BarterItemService {
   // Removed unused _uploadFile method
 
   // Upload multiple images
-  Future<List<String>> uploadImages(List<File> images) async {
-    List<String> imageUrls = [];
-    try {
-      for (var image in images) {
-        final fileName =
-            'item_images/${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}';
-        final storageRef = _storage.ref().child(fileName);
+Future<List<String>> uploadImages(List<File> images) async {
+  List<String> imageUrls = [];
+  try {
+    for (var image in images) {
+      final fileName = 'item_images/${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}';
+      final storageRef = _storage.ref().child(fileName);
 
-        final uploadTask = await storageRef.putFile(image);
-        final downloadUrl = await uploadTask.ref.getDownloadURL();
-        imageUrls.add(downloadUrl);
-      }
-      return imageUrls;
-    } catch (e) {
-      debugPrint('Image Upload Error: $e');
-      return [];
+      // Add some debug prints
+      debugPrint('Uploading image: $fileName');
+      
+      final uploadTask = await storageRef.putFile(image);
+      final downloadUrl = await uploadTask.ref.getDownloadURL();
+      imageUrls.add(downloadUrl);
+      debugPrint('Successfully uploaded image: $downloadUrl');
     }
+    return imageUrls;
+  } catch (e) {
+    debugPrint('Image Upload Error: $e');
+    // Rethrow to make the error visible
+    throw Exception('Failed to upload images: $e');
   }
+}
 
   // Upload video
   Future<String?> uploadVideo(File? videoFile) async {

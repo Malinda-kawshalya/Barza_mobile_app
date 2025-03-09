@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'CartScreen.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+/*import 'CartScreen.dart';
 import 'Product.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
@@ -116,4 +116,4 @@ class ProductDetailsScreen extends StatelessWidget {
       ),
     );
   }
-}
+}*/

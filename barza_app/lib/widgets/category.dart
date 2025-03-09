@@ -9,8 +9,8 @@ class Category extends StatelessWidget {
           EdgeInsets.symmetric(horizontal: 10), // Add padding to the whole row
       child: Row(
         children: [
-          _buildCategoryItem(context, 'images/electronic.png', 'Electronics'),
-          _buildCategoryItem(context, 'images/clothing.png', 'Clothing'),
+          _buildCategoryItem(context, 'assets/category/a.png', 'Electronics'),
+          _buildCategoryItem(context, 'assets/category/category of Cloths.jpg', 'Clothing'),
           _buildCategoryItem(context, 'images/books.png', 'Books'),
           _buildCategoryItem(context, 'images/furniture.png', 'Furniture'),
           _buildCategoryItem(context, 'images/sport.png', 'Sports'),
