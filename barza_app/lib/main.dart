@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xFF0C969C),
       ),
-      initialRoute: '/',
+      initialRoute: '/home',
       routes: {
         '/': (context) => GetStartedPage(),
         '/login': (context) => LoginPage(),
