@@ -1,0 +1,2 @@
+D:/github projects/mad/Barza_mobile_app/barza_app/android/app/.cxx/Debug/1t58683j/x86/CMakeFiles/edit_cache.dir
+D:/github projects/mad/Barza_mobile_app/barza_app/android/app/.cxx/Debug/1t58683j/x86/CMakeFiles/rebuild_cache.dir
