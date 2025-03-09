@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 import '../widgets/bottom_navigationbar.dart'; // Import the CustomBottomNavBar
+import 'clothing_screen.dart';
+import 'electronics_screen.dart';
+import 'books_screen.dart';
+import 'furniture_screen.dart';
+import 'watches_screen.dart';
+import 'software_licenses_screen.dart';
+import 'shoes_screen.dart';
+import 'art_collectibles_screen.dart';
+import 'toys_screen.dart';
+import 'gym_equipment_screen.dart';
 
 class CategoryScreen extends StatefulWidget {
   CategoryScreen({super.key});
@@ -10,18 +20,28 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   final List<Map<String, String>> categories = [
-    {"name": "Cloths", "image": "assets/category/category of Cloths.jpg"},
-    {"name": "Electronics", "image": "assets/category/category of electronic.png"},
+    {"name": "Clothing", "image": "assets/category/category of Cloths.jpg"},
+    {
+      "name": "Electronics",
+      "image": "assets/category/category of electronic.png"
+    },
     {"name": "Books", "image": "assets/category/category of books.png"},
     {"name": "Furniture", "image": "assets/category/category of furniture.png"},
     {"name": "Watches", "image": "assets/category/category of Watch.jpg"},
-    {"name": "Software licenses", "image": "assets/category/category of software.png"},
+    {
+      "name": "Software licenses",
+      "image": "assets/category/category of software.png"
+    },
     {"name": "Shoes", "image": "assets/category/category of shoes.png"},
-    {"name": "Art & Collectibles", "image": "assets/category/category of Art & Collectibles.png"},
+    {
+      "name": "Art & Collectibles",
+      "image": "assets/category/category of Art & Collectibles.png"
+    },
     {"name": "Toys", "image": "assets/category/category of Toys.png"},
-    {"name": "Gym Equipment", "image": "assets/category/category of Gym Equipment.png"},
-    {"name": "Toys", "image": "assets/category/category of Toys.png"},
-    
+    {
+      "name": "Gym Equipment",
+      "image": "assets/category/category of Gym Equipment.png"
+    },
   ];
 
   late List<Map<String, String>> filteredCategories;
@@ -50,24 +70,47 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
   }
 
-  void _navigateToPage(BuildContext context, int index) {
-    String routeName = '';
-
-    if (index == 0) {
-      routeName = '/home';
-    } else if (index == 1) {
-      routeName = '/category';
-    } else if (index == 2) {
-      routeName = '/additem';
-    } else if (index == 3) {
-      routeName = '/wishlist';
-    } else if (index == 4) {
-      routeName = '/user-profile';
+  void _navigateToCategory(String categoryName) {
+    Widget screen;
+    switch (categoryName) {
+      case 'Clothing':
+        screen = ClothingScreen();
+        break;
+      case 'Electronics':
+        screen = ElectronicsScreen();
+        break;
+      case 'Books':
+        screen = BooksScreen();
+        break;
+      case 'Furniture':
+        screen = FurnitureScreen();
+        break;
+      case 'Watches':
+        screen = WatchesScreen();
+        break;
+      case 'Software licenses':
+        screen = SoftwareLicensesScreen();
+        break;
+      case 'Shoes':
+        screen = ShoesScreen();
+        break;
+      case 'Art & Collectibles':
+        screen = ArtCollectiblesScreen();
+        break;
+      case 'Toys':
+        screen = ToysScreen();
+        break;
+      case 'Gym Equipment':
+        screen = GymEquipmentScreen();
+        break;
+      default:
+        screen = CategoryScreen();
     }
 
-    if (ModalRoute.of(context)?.settings.name != routeName) {
-      Navigator.pushReplacementNamed(context, routeName);
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
   }
 
   @override
@@ -123,9 +166,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ),
                 itemCount: filteredCategories.length,
                 itemBuilder: (context, index) {
-                  return CategoryCard(
-                    imageUrl: filteredCategories[index]['image']!,
-                    title: filteredCategories[index]['name']!,
+                  return GestureDetector(
+                    onTap: () =>
+                        _navigateToCategory(filteredCategories[index]['name']!),
+                    child: CategoryCard(
+                      imageUrl: filteredCategories[index]['image']!,
+                      title: filteredCategories[index]['name']!,
+                    ),
                   );
                 },
               ),
@@ -138,6 +185,26 @@ class _CategoryScreenState extends State<CategoryScreen> {
         onItemTapped: (index) => _navigateToPage(context, index),
       ),
     );
+  }
+
+  void _navigateToPage(BuildContext context, int index) {
+    String routeName = '';
+
+    if (index == 0) {
+      routeName = '/home';
+    } else if (index == 1) {
+      routeName = '/category';
+    } else if (index == 2) {
+      routeName = '/additem';
+    } else if (index == 3) {
+      routeName = '/wishlist';
+    } else if (index == 4) {
+      routeName = '/user-profile';
+    }
+
+    if (ModalRoute.of(context)?.settings.name != routeName) {
+      Navigator.pushReplacementNamed(context, routeName);
+    }
   }
 }
 
