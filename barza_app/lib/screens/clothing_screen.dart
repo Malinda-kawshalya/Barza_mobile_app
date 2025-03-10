@@ -43,7 +43,19 @@ class ClothingScreen extends StatelessWidget {
               ),
               itemCount: imageUrls.length,
               itemBuilder: (context, index) {
-                return Image.network(imageUrls[index]);
+                return Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(
+                      imageUrls[index],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
               },
             );
           }
