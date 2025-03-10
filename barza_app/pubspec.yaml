@@ -61,9 +61,15 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/electronic.png
-    - assets/images/cloths.png
     - assets/helpcenter.png
+    - assets/images/electronics.png
+    - assets/images/cloths.png
+    - assets/images/books.png
+    - assets/images/furnitures.png
+    - assets/images/sports.png
+    - assets/images/toys.png
+    - assets/images/accessories.png
+    - assets/images/others.png
     - assets/category/category of Cloths.jpg
     - assets/category/category of electronic.png
     - assets/category/category of books.png

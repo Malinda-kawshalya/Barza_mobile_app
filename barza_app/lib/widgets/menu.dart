@@ -71,7 +71,7 @@ class MenuWidget extends StatelessWidget {
             title: Text('Profile'),
             onTap: () {
               Navigator.pop(context); // Close the drawer
-              Navigator.pushReplacementNamed(context, '/user-profile');
+              Navigator.pushReplacementNamed(context, '/userprofile');
             },
           ),
           ListTile(

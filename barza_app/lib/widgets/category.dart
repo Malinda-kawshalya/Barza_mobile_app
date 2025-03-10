@@ -9,14 +9,14 @@ class Category extends StatelessWidget {
           EdgeInsets.symmetric(horizontal: 10), // Add padding to the whole row
       child: Row(
         children: [
-          _buildCategoryItem(context, 'assets/images/electronic.png', 'Electronics'),
+          _buildCategoryItem(context, 'assets/images/electronics.png', 'Electronics'),
           _buildCategoryItem(context, 'assets/images/cloths.png', 'Clothing'),
-          _buildCategoryItem(context, 'images/books.png', 'Books'),
-          _buildCategoryItem(context, 'images/furniture.png', 'Furniture'),
-          _buildCategoryItem(context, 'images/sport.png', 'Sports'),
-          _buildCategoryItem(context, 'images/toys.png', 'Toys'),
-          _buildCategoryItem(context, 'images/accessories.png', 'Accessories'),
-          _buildCategoryItem(context, 'images/others.png', 'Others'),
+          _buildCategoryItem(context, 'assets/images/books.png', 'Books'),
+          _buildCategoryItem(context, 'assets/images/furnitures.png', 'Furniture'),
+          _buildCategoryItem(context, 'assets/images/sports.png', 'Sports'),
+          _buildCategoryItem(context, 'assets/images/toys.png', 'Toys'),
+          _buildCategoryItem(context, 'assets/images/accessories.png', 'Accessories'),
+          _buildCategoryItem(context, 'assets/images/others.png', 'Others'),
         ],
       ),
     );
@@ -26,8 +26,8 @@ class Category extends StatelessWidget {
       BuildContext context, String imagePath, String categoryName) {
     return Container(
       margin: const EdgeInsets.symmetric(
-          horizontal: 10), // Reduced horizontal margin
-      width: 110, // Fixed width for consistent sizing
+          horizontal: 8), // Reduced horizontal margin
+      width: 100, // Fixed width for consistent sizing
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 255, 255, 255), // White background
         borderRadius: BorderRadius.circular(15), // More rounded corners
@@ -36,7 +36,7 @@ class Category extends StatelessWidget {
             color: Colors.grey.withOpacity(0.8), // Subtle shadow
             spreadRadius: 1,
             blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
+            offset: Offset(0, 5), // changes position of shadow
           ),
         ],
       ),
@@ -48,7 +48,7 @@ class Category extends StatelessWidget {
         },
         child: Padding(
           padding:
-              const EdgeInsets.all(5.0), // Add padding inside the container
+              const EdgeInsets.all(4.0), // Add padding inside the container
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
