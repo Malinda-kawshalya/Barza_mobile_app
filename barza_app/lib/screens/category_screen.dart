@@ -1,15 +1,7 @@
+// categories_screen.dart
 import 'package:flutter/material.dart';
-import '../widgets/bottom_navigationbar.dart'; // Import the CustomBottomNavBar
-import 'clothing_screen.dart';
-import 'electronics_screen.dart';
-import 'books_screen.dart';
-import 'furniture_screen.dart';
-import 'watches_screen.dart';
-import 'software_licenses_screen.dart';
-import 'shoes_screen.dart';
-import 'art_collectibles_screen.dart';
-import 'toys_screen.dart';
-import 'gym_equipment_screen.dart';
+import '../widgets/bottom_navigationbar.dart';
+import 'category_items_screen.dart'; // Import the new screen
 
 class CategoryScreen extends StatefulWidget {
   CategoryScreen({super.key});
@@ -21,27 +13,15 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen> {
   final List<Map<String, String>> categories = [
     {"name": "Clothing", "image": "assets/category/category of Cloths.jpg"},
-    {
-      "name": "Electronics",
-      "image": "assets/category/category of electronic.png"
-    },
+    {"name": "Electronics", "image": "assets/category/category of electronic.png"},
     {"name": "Books", "image": "assets/category/category of books.png"},
     {"name": "Furniture", "image": "assets/category/category of furniture.png"},
     {"name": "Watches", "image": "assets/category/category of Watch.jpg"},
-    {
-      "name": "Software licenses",
-      "image": "assets/category/category of software.png"
-    },
+    {"name": "Software licenses", "image": "assets/category/category of software.png"},
     {"name": "Shoes", "image": "assets/category/category of shoes.png"},
-    {
-      "name": "Art & Collectibles",
-      "image": "assets/category/category of Art & Collectibles.png"
-    },
+    {"name": "Art & Collectibles", "image": "assets/category/category of Art & Collectibles.png"},
     {"name": "Toys", "image": "assets/category/category of Toys.png"},
-    {
-      "name": "Gym Equipment",
-      "image": "assets/category/category of Gym Equipment.png"
-    },
+    {"name": "Gym Equipment", "image": "assets/category/category of Gym Equipment.png"},
   ];
 
   late List<Map<String, String>> filteredCategories;
@@ -71,45 +51,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _navigateToCategory(String categoryName) {
-    Widget screen;
-    switch (categoryName) {
-      case 'Clothing':
-        screen = ClothingScreen();
-        break;
-      case 'Electronics':
-        screen = ElectronicsScreen();
-        break;
-      case 'Books':
-        screen = BooksScreen();
-        break;
-      case 'Furniture':
-        screen = FurnitureScreen();
-        break;
-      case 'Watches':
-        screen = WatchesScreen();
-        break;
-      case 'Software licenses':
-        screen = SoftwareLicensesScreen();
-        break;
-      case 'Shoes':
-        screen = ShoesScreen();
-        break;
-      case 'Art & Collectibles':
-        screen = ArtCollectiblesScreen();
-        break;
-      case 'Toys':
-        screen = ToysScreen();
-        break;
-      case 'Gym Equipment':
-        screen = GymEquipmentScreen();
-        break;
-      default:
-        screen = CategoryScreen();
-    }
-
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => screen),
+      MaterialPageRoute(
+          builder: (context) => SpecificCategoryItemsScreen(category: categoryName)),
     );
   }
 
@@ -117,7 +62,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -134,9 +79,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
           ),
         ),
         centerTitle: true,
-      ),
+      ),  
+        
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+  padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -181,14 +127,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
         ),
       ),
       bottomNavigationBar: CustomBottomNavBar(
-        selectedIndex: 1, // Highlight 'Category'
+        selectedIndex: 1,
         onItemTapped: (index) => _navigateToPage(context, index),
       ),
     );
   }
 
   void _navigateToPage(BuildContext context, int index) {
-    String routeName = '';
+String routeName = '';
 
     if (index == 0) {
       routeName = '/home';
@@ -216,14 +162,13 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ... (Your CategoryCard widget remains the same)
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+borderRadius: BorderRadius.circular(10),
       child: Stack(
         children: [
           Image.asset(imageUrl,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover),
+              width: double.infinity, height: double.infinity, fit: BoxFit.cover),
           Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(8),

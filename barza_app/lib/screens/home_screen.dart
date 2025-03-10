@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
     } else if (index == 3) {
       routeName = '/wishlist';
     } else if (index == 4) {
-      routeName = '/user-profile';
+      routeName = '/userprofile';
     }
 
     if (ModalRoute.of(context)?.settings.name != routeName) {

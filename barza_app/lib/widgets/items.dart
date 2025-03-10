@@ -4,6 +4,9 @@ import '../screens/item_detail_screen.dart';
 import '../models/confirmed_item_model.dart';
 
 class Items extends StatefulWidget {
+  final String? category; // Add category parameter
+
+  Items({this.category});
   @override
   _ItemsState createState() => _ItemsState();
 }
@@ -19,11 +22,20 @@ class _ItemsState extends State<Items> {
 
   Future<List<ConfirmedItem>> _fetchItems() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('confirmed_items')
+            print("Category being fetched: ${widget.category}"); // Print category
+
+       Query<Map<String, dynamic>> query =
+          FirebaseFirestore.instance.collection('confirmed_items');
+
+      if (widget.category != null && widget.category!.isNotEmpty) {
+        query = query.where('category', isEqualTo: widget.category); // Filter by category
+      }
+      QuerySnapshot snapshot = await query
           .orderBy('confirmedAt', descending: true)
-          .limit(8)
           .get();
+
+                print("Number of documents returned: ${snapshot.docs.length}"); // Print document count
+
 
       return snapshot.docs.map((doc) => ConfirmedItem.fromFirestore(doc)).toList();
     } catch (e) {
