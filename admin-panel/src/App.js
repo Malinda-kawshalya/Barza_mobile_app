@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { db } from "./firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Dashboard from "./views/dashboard"; 
+import ItemDetailPage from "./views/itemview";
 
 function App() {
   useEffect(() => {
@@ -25,6 +26,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/:itemId" element={<ItemDetailPage />} />
+
       </Routes>
     </Router>
   );
