@@ -9,8 +9,8 @@ class Category extends StatelessWidget {
           EdgeInsets.symmetric(horizontal: 10), // Add padding to the whole row
       child: Row(
         children: [
-          _buildCategoryItem(context, 'assets/category/a.png', 'Electronics'),
-          _buildCategoryItem(context, 'assets/category/category of Cloths.jpg', 'Clothing'),
+          _buildCategoryItem(context, 'assets/images/electronic.png', 'Electronics'),
+          _buildCategoryItem(context, 'assets/images/cloths.png', 'Clothing'),
           _buildCategoryItem(context, 'images/books.png', 'Books'),
           _buildCategoryItem(context, 'images/furniture.png', 'Furniture'),
           _buildCategoryItem(context, 'images/sport.png', 'Sports'),
@@ -48,14 +48,14 @@ class Category extends StatelessWidget {
         },
         child: Padding(
           padding:
-              const EdgeInsets.all(8.0), // Add padding inside the container
+              const EdgeInsets.all(5.0), // Add padding inside the container
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 imagePath,
-                height: 80,
-                width: 60,
+                height: 70,
+                width: 80,
                 fit: BoxFit
                     .contain, // Ensure the image fits within the container
               ),

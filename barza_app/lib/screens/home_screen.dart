@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/home_appbar.dart';
 import '../widgets/category.dart';
-//import '../widgets/items.dart';
+import '../widgets/items.dart';
 import '../widgets/bottom_navigationbar.dart';
 import '../widgets/menu.dart';
 import 'category_screen.dart'; // Import the category screen
@@ -138,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                //Items(),
+                Items(),
               ],
             ),
           )
