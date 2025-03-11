@@ -86,6 +86,7 @@ const ItemDetailPage = () => {
       await addDoc(collection(db, 'confirmed_items'), {
         itemId: item.id,
         itemName: item.itemName,
+        description: item.description,
         userId: item.userId,
         rating: rating,
         comment: comment,

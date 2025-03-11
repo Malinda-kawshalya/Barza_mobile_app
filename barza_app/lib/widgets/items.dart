@@ -93,7 +93,6 @@ class _ItemsState extends State<Items> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.star, color: Colors.amber, size: 18),
                             Icon(Icons.favorite_border, color: Colors.red, size: 18),
                           ],
                         ),

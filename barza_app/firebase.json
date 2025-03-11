@@ -1,1 +1,41 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"barza-mobile-app","appId":"1:688435936708:android:261ff7da15ec7e1dd03891","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"barza-mobile-app","configurations":{"android":"1:688435936708:android:261ff7da15ec7e1dd03891","ios":"1:688435936708:ios:1452aff9b114146bd03891","macos":"1:688435936708:ios:1452aff9b114146bd03891","web":"1:688435936708:web:46172d5a2d44468bd03891","windows":"1:688435936708:web:8296cfaddd2a1d49d03891"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "barza-mobile-app",
+          "appId": "1:688435936708:android:261ff7da15ec7e1dd03891",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "barza-mobile-app",
+          "configurations": {
+            "android": "1:688435936708:android:261ff7da15ec7e1dd03891",
+            "ios": "1:688435936708:ios:1452aff9b114146bd03891",
+            "macos": "1:688435936708:ios:1452aff9b114146bd03891",
+            "web": "1:688435936708:web:46172d5a2d44468bd03891",
+            "windows": "1:688435936708:web:8296cfaddd2a1d49d03891"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}
