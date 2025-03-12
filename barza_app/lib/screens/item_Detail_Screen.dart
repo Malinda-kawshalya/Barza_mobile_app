@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
-import '../models/exchange_requests_model.dart'; // Import your ExchangeRequest model
+import 'package:firebase_auth/firebase_auth.dart';
+import '../models/exchange_requests_model.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final String itemId;
@@ -23,7 +23,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
   Future<DocumentSnapshot> _fetchItemDetails() async {
     try {
-      return await FirebaseFirestore.instance.collection('confirmed_items').doc(widget.itemId).get();
+      return await FirebaseFirestore.instance
+          .collection('confirmed_items')
+          .doc(widget.itemId)
+          .get();
     } catch (e) {
       print('Error fetching item details: $e');
       throw Exception('Failed to load item details');
@@ -34,37 +37,81 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     try {
       User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        // Handle case where user is not logged in
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please log in to request an exchange.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Please log in to request an exchange.')));
         return;
       }
 
       String requestingUserId = user.uid;
-      String itemOwnerId = itemData['userId']; // Assuming userId of the owner is in itemData
+      String itemOwnerId = itemData['userId'];
 
       if (requestingUserId == itemOwnerId) {
-        // Handle case where user tries to request exchange for their own item
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('You cannot request an exchange for your own item.')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('You cannot request an exchange for your own item.')));
         return;
       }
 
-      ExchangeRequest exchangeRequest = ExchangeRequest(
-        requestId: '', // Firestore will generate this
-        requestingUserId: requestingUserId,
-        requestedItemId: widget.itemId,
-        itemOwnerId: itemOwnerId,
-        status: 'pending',
-        timestamp: Timestamp.now(),
-      );
+      // Fetch user's items from confirmed_items
+      QuerySnapshot userItems = await FirebaseFirestore.instance
+          .collection('confirmed_items')
+          .where('userId', isEqualTo: requestingUserId)
+          .get();
 
-      await FirebaseFirestore.instance.collection('exchange_requests').add(exchangeRequest.toMap());
+      if (userItems.docs.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('You have no items to offer.')));
+        return;
+      }
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Exchange request sent!')));
+      if (userItems.docs.length == 1) {
+        // Only one item, use it directly
+        String offeredItemId = userItems.docs.first.id;
+        _createExchangeRequest(requestingUserId, widget.itemId, itemOwnerId, offeredItemId);
+      } else {
+        // Multiple items, show selection screen
+        _showItemSelectionScreen(userItems.docs, requestingUserId, widget.itemId, itemOwnerId);
+      }
     } catch (e) {
       print('Error sending exchange request: $e');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to send exchange request.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to send exchange request.')));
     }
   }
+
+  void _createExchangeRequest(String requestingUserId, String requestedItemId, String itemOwnerId, String offeredItemId) async {
+    ExchangeRequest exchangeRequest = ExchangeRequest(
+      requestId: '',
+      requestingUserId: requestingUserId,
+      requestedItemId: requestedItemId,
+      itemOwnerId: itemOwnerId,
+      status: 'pending',
+      timestamp: Timestamp.now(),
+      offeredItemId: offeredItemId, // Add offeredItemId
+    );
+
+    await FirebaseFirestore.instance
+        .collection('exchange_requests')
+        .add(exchangeRequest.toMap());
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Exchange request sent!')));
+  }
+
+  void _showItemSelectionScreen(List<DocumentSnapshot> items, String requestingUserId, String requestedItemId, String itemOwnerId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ItemSelectionScreen(
+          items: items,
+          onItemSelected: (selectedItemId) {
+            _createExchangeRequest(requestingUserId, requestedItemId, itemOwnerId, selectedItemId);
+            Navigator.pop(context); // Close selection screen
+          },
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +236,32 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           } else {
             return Center(child: Text('Item not found'));
           }
+        },
+      ),
+    );
+  }
+}
+
+class ItemSelectionScreen extends StatelessWidget {
+  final List<DocumentSnapshot> items;
+  final Function(String) onItemSelected;
+
+  ItemSelectionScreen({required this.items, required this.onItemSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Select Item to Offer')),
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          var itemData = items[index].data() as Map<String, dynamic>;
+          return ListTile(
+            title: Text(itemData['itemName'] ?? 'Unknown Item'),
+            onTap: () {
+              onItemSelected(items[index].id);
+            },
+          );
         },
       ),
     );

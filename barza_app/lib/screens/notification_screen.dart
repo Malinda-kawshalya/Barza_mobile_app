@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart'; // For date formatting
+import 'exchange_detail_screen.dart';
 
 class NotificationsScreen extends StatelessWidget {
   @override
@@ -65,6 +66,22 @@ class NotificationsScreen extends StatelessWidget {
         tileColor: read ? Colors.grey[100] : null,
         onTap: () {
           _markAsRead(snapshot.data!.docs[index].id);
+           if (notification['exchangeRequestId'] != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExchangeRequestDetailsScreen(
+                          exchangeRequestId: notification['exchangeRequestId'],
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Handle case where exchangeRequestId is missing
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Exchange request ID not found.")),
+                    );
+                  }
+                
         },
       );
     },
