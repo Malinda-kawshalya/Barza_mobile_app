@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/confirmed_item_model.dart';
 import 'item_detail_screen.dart';
+import '../widgets/bottom_navigationbar.dart'; // Import the bottom navigation bar
 
 class AllItemsScreen extends StatefulWidget {
   const AllItemsScreen({Key? key}) : super(key: key);
@@ -32,6 +33,26 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     } catch (e) {
       print("Error fetching items: $e");
       return [];
+    }
+  }
+
+  void _navigateToPage(BuildContext context, int index) {
+    String routeName = '';
+
+    if (index == 0) {
+      routeName = '/home';
+    } else if (index == 1) {
+      routeName = '/category';
+    } else if (index == 2) {
+      routeName = '/additem';
+    } else if (index == 3) {
+      routeName = '/allitems';
+    } else if (index == 4) {
+      routeName = '/userprofile';
+    }
+
+    if (ModalRoute.of(context)?.settings.name != routeName) {
+      Navigator.pushReplacementNamed(context, routeName);
     }
   }
 
@@ -165,6 +186,10 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
             return Center(child: Text('No items available'));
           }
         },
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: 3, // Highlight 'All Items'
+        onItemTapped: (index) => _navigateToPage(context, index),
       ),
     );
   }
