@@ -20,6 +20,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -28,6 +29,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void dispose() {
     _nameController.dispose();
     _addressController.dispose();
+    _phoneController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -63,6 +65,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           'fullName': _nameController.text.trim(),
           'address': _addressController.text.trim(),
           'email': _emailController.text.trim(),
+          'phoneNumber': _phoneController.text.trim(),
           'createdAt': FieldValue.serverTimestamp(),
         });
 
@@ -189,6 +192,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   _buildTextField('Address', false, _addressController),
                   const SizedBox(height: 16),
                   _buildTextField('E-Mail', false, _emailController),
+                  const SizedBox(height: 16),
+                  _buildTextField('Phone Number', false, _phoneController),
                   const SizedBox(height: 16),
                   _buildTextField('Password', true, _passwordController),
                   const SizedBox(height: 16),
