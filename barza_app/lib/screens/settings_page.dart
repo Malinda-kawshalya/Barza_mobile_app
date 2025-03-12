@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'user_profile.dart';
+import 'notification_screen.dart';
+import 'helpCenter_page.dart';
+import 'feedback_form.dart';
+import 'password_security.dart';
+import 'privacy_permissions.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -19,8 +25,8 @@ class SettingsPage extends StatelessWidget {
         title: const Text(
           'Settings',
           style: TextStyle(
-            color: Colors.teal, 
-            fontSize: 24, 
+            color: Colors.teal,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -49,7 +55,12 @@ class SettingsPage extends StatelessWidget {
                 title: 'Personal Information',
                 subtitle: 'Your account information',
                 onTap: () {
-                  // Navigation logic would go here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserProfileScreen(),
+                    ),
+                  );
                 },
               ),
               SettingsItem(
@@ -57,7 +68,12 @@ class SettingsPage extends StatelessWidget {
                 title: 'Password & Security',
                 subtitle: 'Manage your account security',
                 onTap: () {
-                  // Navigation logic would go here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PasswordSecurityPage(),
+                    ),
+                  );
                 },
               ),
             ]),
@@ -68,7 +84,12 @@ class SettingsPage extends StatelessWidget {
                 title: 'Notifications',
                 subtitle: 'Manage your notification preferences',
                 onTap: () {
-                  // Navigation logic would go here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotificationsScreen(),
+                    ),
+                  );
                 },
               ),
               SettingsItem(
@@ -76,7 +97,12 @@ class SettingsPage extends StatelessWidget {
                 title: 'Privacy & Permissions',
                 subtitle: 'Control your privacy settings',
                 onTap: () {
-                  // Navigation logic would go here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PrivacyPermissionsScreen(),
+                    ),
+                  );
                 },
               ),
               SettingsItem(
@@ -95,7 +121,12 @@ class SettingsPage extends StatelessWidget {
                 title: 'Help Center',
                 subtitle: 'Get help and support',
                 onTap: () {
-                  // Navigation logic would go here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HelpCenterPage(),
+                    ),
+                  );
                 },
               ),
               SettingsItem(
@@ -103,16 +134,19 @@ class SettingsPage extends StatelessWidget {
                 title: 'Send Feedback',
                 subtitle: 'Help us improve the app',
                 onTap: () {
-                  // Navigation logic would go here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FeedbackForm(),
+                    ),
+                  );
                 },
               ),
               SettingsItem(
                 icon: Icons.info_outline,
                 title: 'About',
                 subtitle: 'Version 1.2.0',
-                onTap: () {
-                  // Navigation logic would go here
-                },
+                onTap: () {},
               ),
             ]),
             const SizedBox(height: 24),
@@ -227,7 +261,7 @@ class SettingsSection extends StatelessWidget {
               final index = entry.key;
               final item = entry.value;
               final isLast = index == items.length - 1;
-              
+
               return Column(
                 children: [
                   item,
