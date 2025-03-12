@@ -87,6 +87,7 @@ class MenuWidget extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               Navigator.pop(context); // Close the drawer
+              Navigator.pushReplacementNamed(context, '/login');
               // Implement logout functionality
             },
           ),
