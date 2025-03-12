@@ -143,9 +143,9 @@ String routeName = '';
     } else if (index == 2) {
       routeName = '/additem';
     } else if (index == 3) {
-      routeName = '/wishlist';
+      routeName = '/allitems';
     } else if (index == 4) {
-      routeName = '/user-profile';
+      routeName = '/userprofile';
     }
 
     if (ModalRoute.of(context)?.settings.name != routeName) {
