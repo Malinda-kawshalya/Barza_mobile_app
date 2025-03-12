@@ -7,6 +7,7 @@ import '/screens/user_profile.dart';
 import '/screens/category_screen.dart';
 import '/screens/settings_page.dart';
 import '/screens/notification_screen.dart';
+import '/screens/all_item_screen.dart';
 //import '/screens/wishlist_screen.dart';
 
 class AppRoutes {
@@ -20,6 +21,7 @@ class AppRoutes {
   static const String cart = '/cart';
   static const String settings = '/settings';
   static const String notification = '/notifications';
+  static const String allitems = '/allitems';
 
   static Map<String, WidgetBuilder> routes = {
     login: (context) => LoginPage(),
@@ -29,7 +31,8 @@ class AppRoutes {
     userprofile: (context) => UserProfileScreen(),
     category: (context) => CategoryScreen(),
     settings: (context) => SettingsPage(),
-    notification: (context) => NotificationsScreen()
+    notification: (context) => NotificationsScreen(),
+    allitems: (context) => AllItemsScreen()
     //wishlist: (context) => WishlistScreen(),
   };
 }

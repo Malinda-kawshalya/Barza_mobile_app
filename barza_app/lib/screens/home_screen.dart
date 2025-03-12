@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
     } else if (index == 2) {
       routeName = '/additem';
     } else if (index == 3) {
-      routeName = '/wishlist';
+      routeName = '/allitems';
     } else if (index == 4) {
       routeName = '/userprofile';
     }

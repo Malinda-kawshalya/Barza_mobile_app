@@ -56,8 +56,8 @@ class CustomBottomNavBar extends StatelessWidget {
               label: 'Add Item', // Big icon for emphasis
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'Wishlist',
+              icon: Icon(Icons.list_alt),
+              label: 'All Items',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
