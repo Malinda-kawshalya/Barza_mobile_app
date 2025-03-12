@@ -11,6 +11,7 @@ import '/screens/all_item_screen.dart';
 import '/screens/feedback_form.dart';
 import '/screens/password_security.dart';
 import '/screens/privacy_permissions.dart';
+import '/screens/buy_starts_page.dart';
 //import '/screens/wishlist_screen.dart';
 
 class AppRoutes {
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String feedback = '/feedback';
   static const String passwordsecurity = '/passwordsecurity';
   static const String privacypermissions = '/privacypermissions';
+  static const String buystars = '/buystars';
 
   static Map<String, WidgetBuilder> routes = {
     login: (context) => LoginPage(),
@@ -42,6 +44,7 @@ class AppRoutes {
     feedback: (context) => FeedbackForm(),
     passwordsecurity: (context) => PasswordSecurityPage(),
     privacypermissions: (context) => PrivacyPermissionsScreen(),
+    buystars: (context) => BuyStarsPage(),
     //wishlist: (context) => WishlistScreen(),
   };
 }

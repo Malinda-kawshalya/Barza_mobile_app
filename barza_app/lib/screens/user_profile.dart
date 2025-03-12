@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:barza_app/models/profile_model.dart';
 import 'package:barza_app/services/profile_service.dart';
+import 'buy_starts_page.dart'; // Import the BuyStarsPage
 import '../widgets/bottom_navigationbar.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -165,6 +166,37 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       'Location',
                       _userProfile?.location ?? '',
                       Icons.location_on,
+                    ),
+
+                    // Buy Stars Button
+                    SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BuyStarsPage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Buy Stars',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                      ),
                     ),
 
                     // Logout Button
