@@ -58,14 +58,14 @@ class MenuWidget extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/additem');
             },
           ),
-          ListTile(
+          /*ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Cart'),
             onTap: () {
               Navigator.pop(context); // Close the drawer
               Navigator.pushReplacementNamed(context, '/cart');
             },
-          ),
+          ),*/
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),
