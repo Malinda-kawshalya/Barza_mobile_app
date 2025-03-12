@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:barza_app/models/profile_model.dart';
 import 'package:barza_app/services/profile_service.dart';
+import 'package:image_picker/image_picker.dart';
 import 'buy_starts_page.dart'; // Import the BuyStarsPage
 import '../widgets/bottom_navigationbar.dart';
 
@@ -14,7 +16,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final _userProfileService = UserProfileService();
   UserProfile? _userProfile;
   bool _isLoading = true;
-  String _username = 'User4102'; // Default username
   int _ratingStars = 7; // Default rating
 
   @override
@@ -51,6 +52,39 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      // User is not logged in, show a message or navigate to login
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please log in to update your profile photo.')),
+      );
+      // Optionally navigate to the login screen:
+      // Navigator.of(context).pushReplacementNamed('/login');
+      return; // Exit the method
+    }
+
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        await _userProfileService.updateProfilePhoto(File(pickedFile.path));
+        _fetchUserProfile(); // Refresh profile after update
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error uploading image: $e')),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +103,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             icon: Icon(Icons.settings, color: Colors.teal),
             onPressed: () {
               // Navigate to settings screen
-              // Navigator.of(context).pushNamed('/settings');
+              Navigator.of(context).pushNamed('/settings');
             },
           ),
         ],
@@ -93,17 +127,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             color: Colors.grey[300],
                           ),
                           child: Center(
-                            child: Icon(
-                              Icons.person,
-                              size: 80,
-                              color: Colors.pink,
-                            ),
+                            child: _userProfile?.profileImageUrl != null
+                                ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: NetworkImage(
+                                        _userProfile!.profileImageUrl!),
+                                  )
+                                : Icon(
+                                    Icons.person,
+                                    size: 80,
+                                    color: Colors.pink,
+                                  ),
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            // Add functionality to edit profile picture
-                          },
+                          onTap: _pickImage,
                           child: Container(
                             width: 30,
                             height: 30,
@@ -124,7 +162,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
                     // Username
                     Text(
-                      _username,
+                      _userProfile?.fullName ?? 'User', // Display fullName
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
