@@ -5,14 +5,14 @@ class Chat {
   final List<String> participants;
   final String lastMessage;
   final Timestamp timestamp;
-  final String? name;
+  final String? fullName;
 
   Chat({
     required this.chatId,
     required this.participants,
     required this.lastMessage,
     required this.timestamp,
-    this.name,
+    this.fullName,
   });
 
   factory Chat.fromFirestore(DocumentSnapshot doc) {
@@ -22,7 +22,7 @@ class Chat {
       participants: List<String>.from(data['participants']),
       lastMessage: data['lastMessage'],
       timestamp: data['timestamp'],
-      name: data['name'],
+      fullName: data['fullName'],
     );
   }
 
@@ -31,7 +31,7 @@ class Chat {
       'participants': participants,
       'lastMessage': lastMessage,
       'timestamp': timestamp,
-      'name': name,
+      'fullName': fullName,
     };
   }
 }
