@@ -5,6 +5,14 @@ import 'package:image_picker/image_picker.dart';
 import '../services/item_service.dart';
 import '../models/item_model.dart';
 
+// Custom colors for app theme
+const Color primaryColor = Color(0xFF0C969C);
+const Color accentColor = Color(0xFF0C969C);
+const Color backgroundColor = Color(0xFFF5F5F5);
+const Color cardColor = Color(0xFFFFFFFF);
+const Color errorColor = Color(0xFFE57373);
+const Color successColor = Color(0xFF81C784);
+
 class AddItemScreen extends StatefulWidget {
   @override
   _AddItemScreenState createState() => _AddItemScreenState();
@@ -21,8 +29,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _reasonForBarterController = TextEditingController();
-  final TextEditingController _preferredExchangeController = TextEditingController();
+  final TextEditingController _reasonForBarterController =
+      TextEditingController();
+  final TextEditingController _preferredExchangeController =
+      TextEditingController();
   final TextEditingController _locationController = TextEditingController();
 
   // Dropdown Values
@@ -45,21 +55,34 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   // Dropdown Lists
   final List<String> _categories = [
-    'Clothing', 'Electronics', 'Books', 'Furniture', 'Watches', 'Software Licenses',
-    'Shoes', 'Art & Collectibles', 'Toys', 'Gym Equipment'
+    'Clothing',
+    'Electronics',
+    'Books',
+    'Furniture',
+    'Watches',
+    'Software Licenses',
+    'Shoes',
+    'Art & Collectibles',
+    'Toys',
+    'Gym Equipment'
   ];
 
   final List<String> _conditions = [
-    'New', 'Like New', 'Good', 'Fair', 'Needs Repair'
+    'New',
+    'Like New',
+    'Good',
+    'Fair',
+    'Needs Repair'
   ];
 
   final List<String> _usageDurations = [
-    'Less than 6 months', '6-12 months', '1-2 years', '2+ years'
+    'Less than 6 months',
+    '6-12 months',
+    '1-2 years',
+    '2+ years'
   ];
 
-  final List<String> _contactMethods = [
-    'Chat Only', 'Phone Number', 'Email'
-  ];
+  final List<String> _contactMethods = ['Chat Only', 'Phone Number', 'Email'];
 
   // Image Picker Method
   Future<void> _pickImages() async {
@@ -96,17 +119,28 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
 
     // Validate image upload
-    for (var image in _images) {
-    if (!await image.exists()) {
+    if (_images.isEmpty || _images.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Image file not found: ${image.path}'),
-          backgroundColor: Colors.red,
+          content: Text('Please upload at least 3 images'),
+          backgroundColor: errorColor,
         ),
       );
       return;
     }
-  }
+
+    // Validate image upload
+    for (var image in _images) {
+      if (!await image.exists()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Image file not found: ${image.path}'),
+            backgroundColor: errorColor,
+          ),
+        );
+        return;
+      }
+    }
 
     // Set loading state
     setState(() {
@@ -137,7 +171,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Item Added Successfully!'),
-            backgroundColor: Colors.green,
+            backgroundColor: successColor,
           ),
         );
         _resetForm();
@@ -145,7 +179,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to add item'),
-            backgroundColor: Colors.red,
+            backgroundColor: errorColor,
           ),
         );
       }
@@ -153,7 +187,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: ${e.toString()}'),
-          backgroundColor: Colors.red,
+          backgroundColor: errorColor,
         ),
       );
     } finally {
@@ -173,7 +207,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
     _reasonForBarterController.clear();
     _preferredExchangeController.clear();
     _locationController.clear();
-    
+
     setState(() {
       _selectedCategory = null;
       _selectedCondition = null;
@@ -189,286 +223,355 @@ class _AddItemScreenState extends State<AddItemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text('Add Barter Item'),
+        title: Text('Add Barter Item',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         centerTitle: true,
+        backgroundColor: primaryColor,
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-        Navigator.of(context).pushReplacementNamed('/home');
+            Navigator.of(context).pushReplacementNamed('/home');
           },
         ),
       ),
-      body: _isLoading 
-        ? Center(child: CircularProgressIndicator())
-        : SingleChildScrollView(
-            padding: EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Item Name
-                  TextFormField(
-                    controller: _itemNameController,
-                    decoration: InputDecoration(
-                      labelText: 'Item Name',
-                      border: OutlineInputBorder(),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator(color: accentColor))
+          : SingleChildScrollView(
+              padding: EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Header Card
+                    Card(
+                      elevation: 2,
+                      color: cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Icon(Icons.swap_horiz,
+                                size: 40, color: accentColor),
+                            SizedBox(height: 8),
+                            Text(
+                              'Create a new barter listing',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              'Add details about your item to find the perfect exchange',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter item name';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
+                    SizedBox(height: 20),
 
-                  // Category Dropdown
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Category',
-                      border: OutlineInputBorder(),
+                    // Item Basic Info Section
+                    _buildSectionTitle('Basic Information'),
+                    Card(
+                      elevation: 1,
+                      color: cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            // Item Name
+                            TextFormField(
+                              controller: _itemNameController,
+                              decoration: _inputDecoration(
+                                  'Item Name', Icons.inventory_2),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Please enter item name';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 16),
+
+                            // Category Dropdown
+                            DropdownButtonFormField<String>(
+                              decoration:
+                                  _inputDecoration('Category', Icons.category),
+                              value: _selectedCategory,
+                              items: _categories.map((category) {
+                                return DropdownMenuItem(
+                                  value: category,
+                                  child: Text(category),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedCategory = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please select a category';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 16),
+
+                            // Condition Dropdown
+                            DropdownButtonFormField<String>(
+                              decoration: _inputDecoration(
+                                  'Item Condition', Icons.star_rate),
+                              value: _selectedCondition,
+                              items: _conditions.map((condition) {
+                                return DropdownMenuItem(
+                                  value: condition,
+                                  child: Text(condition),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedCondition = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please select item condition';
+                                }
+                                return null;
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    value: _selectedCategory,
-                    items: _categories.map((category) {
-                      return DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCategory = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select a category';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
+                    SizedBox(height: 20),
 
-                  // Condition Dropdown
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Item Condition',
-                      border: OutlineInputBorder(),
+                    // Item Details Section
+                    _buildSectionTitle('Item Details'),
+                    Card(
+                      elevation: 1,
+                      color: cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            // Brand
+                            TextFormField(
+                              controller: _brandController,
+                              decoration: _inputDecoration(
+                                  'Brand/Manufacturer (Optional)',
+                                  Icons.business),
+                            ),
+                            SizedBox(height: 16),
+
+                            // Description
+                            TextFormField(
+                              controller: _descriptionController,
+                              decoration: _inputDecoration(
+                                  'Detailed Description', Icons.description),
+                              maxLines: 3,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Please provide item description';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 16),
+
+                            // Usage Duration
+                            DropdownButtonFormField<String>(
+                              decoration: _inputDecoration(
+                                  'Usage Duration', Icons.access_time),
+                              value: _selectedUsageDuration,
+                              items: _usageDurations.map((duration) {
+                                return DropdownMenuItem(
+                                  value: duration,
+                                  child: Text(duration),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedUsageDuration = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please select usage duration';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 16),
+
+                            // Reason for Barter
+                            TextFormField(
+                              controller: _reasonForBarterController,
+                              decoration: _inputDecoration(
+                                  'Reason for Bartering (Optional)',
+                                  Icons.swap_vert),
+                              maxLines: 2,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    value: _selectedCondition,
-                    items: _conditions.map((condition) {
-                      return DropdownMenuItem(
-                        value: condition,
-                        child: Text(condition),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCondition = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select item condition';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
+                    SizedBox(height: 20),
 
-                  // Brand
-                  TextFormField(
-                    controller: _brandController,
-                    decoration: InputDecoration(
-                      labelText: 'Brand/Manufacturer (Optional)',
-                      border: OutlineInputBorder(),
+                    // Image Upload Section
+                    _buildSectionTitle('Photos'),
+                    Card(
+                      elevation: 1,
+                      color: cardColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Upload Photos (3-6 images required)',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            ElevatedButton.icon(
+                              onPressed: _pickImages,
+                              icon: Icon(Icons.photo_library),
+                              label: Text(
+                                'Select Images',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: accentColor,
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            if (_images.isNotEmpty)
+                              Container(
+                                height: 100,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _images.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(right: 8),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.file(
+                                          _images[index],
+                                          height: 100,
+                                          width: 100,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            else
+                              Text(
+                                'No images selected',
+                                style: TextStyle(color: errorColor),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16),
+                    SizedBox(height: 24),
 
-                  // Description
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                      labelText: 'Detailed Description',
-                      border: OutlineInputBorder(),
+                    // Submit Button
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        child: Text(
+                          'ADD BARTER ITEM',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
                     ),
-                    maxLines: 3,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please provide item description';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-
-                  // Usage Duration
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Usage Duration',
-                      border: OutlineInputBorder(),
-                    ),
-                    value: _selectedUsageDuration,
-                    items: _usageDurations.map((duration) {
-                      return DropdownMenuItem(
-                        value: duration,
-                        child: Text(duration),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedUsageDuration = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select usage duration';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-
-                  // Reason for Barter
-                  TextFormField(
-                    controller: _reasonForBarterController,
-                    decoration: InputDecoration(
-                      labelText: 'Reason for Bartering (Optional)',
-                      border: OutlineInputBorder(),
-                    ),
-                    maxLines: 2,
-                  ),
-                  SizedBox(height: 16),
-
-                  // Image Upload Section
-                  Text(
-                    'Upload Photos (3-6 images required)',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: _pickImages,
-                    icon: Icon(Icons.photo_library),
-                    label: Text('Select Images'),
-                  ),
-                  SizedBox(height: 8),
-                  _images.isNotEmpty
-                    ? Text('${_images.length} image(s) selected')
-                    : Text('No images selected', style: TextStyle(color: Colors.red)),
-                  
-                  // Video Upload
-                  SizedBox(height: 16),
-                  Text(
-                    'Upload Video (Optional)',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: _pickVideo,
-                    icon: Icon(Icons.video_call),
-                    label: Text('Select Video'),
-                  ),
-                  SizedBox(height: 8),
-                  _videoFile != null
-                    ? Text('Video selected')
-                    : Text('No video selected', style: TextStyle(color: Colors.grey)),
-                  
-                  // Preferred Exchange
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _preferredExchangeController,
-                    decoration: InputDecoration(
-                      labelText: 'Preferred Exchange Item',
-                      border: OutlineInputBorder(),
-                    ),
-                    maxLines: 2,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please describe your preferred exchange item';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  // Multiple Offers Switch
-                  SizedBox(height: 16),
-                  SwitchListTile(
-                    title: Text('Willing to Accept Multiple Offers'),
-                    value: _willingToAcceptMultipleOffers,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _willingToAcceptMultipleOffers = value;
-                      });
-                    },
-                  ),
-
-                  // Exchange Location
-                  TextFormField(
-                    controller: _locationController,
-                    decoration: InputDecoration(
-                      labelText: 'Exchange Location',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please provide exchange location';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  // Contact Method
-                  SizedBox(height: 16),
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: 'Contact Method',
-                      border: OutlineInputBorder(),
-                    ),
-                    value: _selectedContactMethod,
-                    items: _contactMethods.map((method) {
-                      return DropdownMenuItem(
-                        value: method,
-                        child: Text(method),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedContactMethod = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Please select a contact method';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  // Show Contact Info Switch
-                  SwitchListTile(
-                    title: Text('Show Contact Information'),
-                    value: _showContactInformation,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _showContactInformation = value;
-                      });
-                    },
-                  ),
-
-                  // Submit Button
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    child: Text('Add Barter Item'),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
-                    ),
-                  ),
-                ],
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
-          ),
+    );
+  }
+
+  // Helper method for section titles
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: primaryColor,
+        ),
+      ),
+    );
+  }
+
+  // Helper method for input decoration
+  InputDecoration _inputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon, color: accentColor),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.grey.shade300),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.grey.shade300),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: accentColor, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: errorColor),
+      ),
+      filled: true,
+      fillColor: Colors.white,
     );
   }
 
