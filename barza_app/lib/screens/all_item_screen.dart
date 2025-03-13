@@ -29,6 +29,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
+    
   }
 
   Future<List<ConfirmedItem>> _fetchItems() async {
