@@ -5,7 +5,7 @@ import '../widgets/items.dart';
 import '../widgets/bottom_navigationbar.dart';
 import '../widgets/menu.dart';
 import 'category_screen.dart';
-import 'all_item_screen.dart'; // Import the category screen
+import 'all_item_screen.dart'; 
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
