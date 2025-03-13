@@ -54,36 +54,45 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _signIn() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
-
-      try {
-        await _auth.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
-        
-        if (!mounted) return;
-        
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      } on FirebaseAuthException catch (e) {
         setState(() {
-          _errorMessage = e.message ?? 'An error occurred';
+            _isLoading = true;
+            _errorMessage = null;
         });
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
+
+        try {
+            print('Email: ${_emailController.text.trim()}');
+            print('Password: ${_passwordController.text.trim()}');
+
+            await _auth.signInWithEmailAndPassword(
+                email: _emailController.text.trim(),
+                password: _passwordController.text.trim(),
+            );
+
+            print('Authentication successful');
+            print('Context before navigation: $context');
+
+            if (mounted) {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
+            } else {
+                print('Widget not mounted, navigation skipped');
+            }
+        } on FirebaseAuthException catch (e) {
+            print('Firebase Auth Error: ${e.message}');
+            setState(() {
+                _errorMessage = e.message ?? 'An error occurred';
+            });
+        } finally {
+            if (mounted) {
+                setState(() {
+                    _isLoading = false;
+                });
+            }
         }
-      }
     }
-  }
+}
 
   @override
   Widget build(BuildContext context) {
