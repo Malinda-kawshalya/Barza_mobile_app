@@ -13,6 +13,8 @@ import '/screens/password_security.dart';
 import '/screens/privacy_permissions.dart';
 import '/screens/buy_starts_page.dart';
 import '/screens/chatList_screen.dart';
+import '/screens/call_now_page.dart';
+import '/screens/send_email.dart';  
 //import '/screens/wishlist_screen.dart';
 
 class AppRoutes {
@@ -32,6 +34,8 @@ class AppRoutes {
   static const String privacypermissions = '/privacypermissions';
   static const String buystars = '/buystars';
   static const String chatlist = '/chatlist';
+  static const String callnow = '/callnow';
+  static const String sendemail = '/sendemail';
 
   static Map<String, WidgetBuilder> routes = {
     login: (context) => LoginPage(),
@@ -48,6 +52,8 @@ class AppRoutes {
     privacypermissions: (context) => PrivacyPermissionsScreen(),
     buystars: (context) => BuyStarsPage(),
     chatlist: (context) => ChatListScreen(),
+    callnow: (context) => CallPage(),
+    sendemail: (context) => SendEmailPage(),
     //wishlist: (context) => WishlistScreen(),
   };
 }
