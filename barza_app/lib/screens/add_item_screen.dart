@@ -31,24 +31,16 @@ class _AddItemScreenState extends State<AddItemScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _reasonForBarterController =
       TextEditingController();
-  final TextEditingController _preferredExchangeController =
-      TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
 
   // Dropdown Values
   String? _selectedCategory;
   String? _selectedCondition;
   String? _selectedUsageDuration;
-  String? _selectedContactMethod;
 
   // Image and Video Upload
   List<File> _images = [];
-  File? _videoFile;
-  final ImagePicker _picker = ImagePicker();
 
-  // Other Settings
-  bool _willingToAcceptMultipleOffers = false;
-  bool _showContactInformation = false;
+  final ImagePicker _picker = ImagePicker();
 
   // Loading state
   bool _isLoading = false;
@@ -82,36 +74,16 @@ class _AddItemScreenState extends State<AddItemScreen> {
     '2+ years'
   ];
 
-  final List<String> _contactMethods = ['Chat Only', 'Phone Number', 'Email'];
-
-  // Image Picker Method
   Future<void> _pickImages() async {
-    final List<XFile>? pickedFiles = await _picker.pickMultiImage(
-      imageQuality: 80,
-    );
-
+    final pickedFiles = await _picker.pickMultiImage();
     if (pickedFiles != null) {
       setState(() {
-        _images = pickedFiles.map((file) => File(file.path)).toList();
+        _images =
+            pickedFiles.map((pickedFile) => File(pickedFile.path)).toList();
       });
     }
   }
 
-  // Video Picker Method
-  Future<void> _pickVideo() async {
-    final XFile? pickedFile = await _picker.pickVideo(
-      source: ImageSource.gallery,
-      maxDuration: const Duration(minutes: 2),
-    );
-
-    if (pickedFile != null) {
-      setState(() {
-        _videoFile = File(pickedFile.path);
-      });
-    }
-  }
-
-  // Submit Form
   Future<void> _submitForm() async {
     // Validate form
     if (!_formKey.currentState!.validate()) {
@@ -158,12 +130,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
         usageDuration: _selectedUsageDuration!,
         reasonForBarter: _reasonForBarterController.text.trim(),
         images: _images,
-        videoFile: _videoFile,
-        preferredExchange: _preferredExchangeController.text.trim(),
-        acceptMultipleOffers: _willingToAcceptMultipleOffers,
-        exchangeLocation: _locationController.text.trim(),
-        contactMethod: _selectedContactMethod!,
-        showContactInfo: _showContactInformation,
       );
 
       // Handle result
@@ -205,18 +171,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
     _brandController.clear();
     _descriptionController.clear();
     _reasonForBarterController.clear();
-    _preferredExchangeController.clear();
-    _locationController.clear();
 
     setState(() {
       _selectedCategory = null;
       _selectedCondition = null;
       _selectedUsageDuration = null;
-      _selectedContactMethod = null;
+
       _images.clear();
-      _videoFile = null;
-      _willingToAcceptMultipleOffers = false;
-      _showContactInformation = false;
     });
   }
 
@@ -582,8 +543,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
     _brandController.dispose();
     _descriptionController.dispose();
     _reasonForBarterController.dispose();
-    _preferredExchangeController.dispose();
-    _locationController.dispose();
     super.dispose();
   }
 }

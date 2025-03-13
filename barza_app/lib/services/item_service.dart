@@ -66,11 +66,6 @@ Future<List<String>> uploadImages(List<File> images) async {
     required String usageDuration,
     String? reasonForBarter,
     required List<File> images,
-    File? videoFile,
-    required String preferredExchange,
-    bool acceptMultipleOffers = false,
-    required String exchangeLocation,
-    required String contactMethod,
     bool showContactInfo = false,
   }) async {
     try {
@@ -83,8 +78,7 @@ Future<List<String>> uploadImages(List<File> images) async {
       // Upload images
       final imageUrls = await uploadImages(images);
 
-      // Upload video
-      final videoUrl = await uploadVideo(videoFile);
+
 
       // Create BarterItem
       final barterItem = BarterItem(
@@ -96,12 +90,6 @@ Future<List<String>> uploadImages(List<File> images) async {
         usageDuration: usageDuration,
         reasonForBarter: reasonForBarter,
         images: imageUrls,
-        videoUrl: videoUrl,
-        preferredExchange: preferredExchange,
-        acceptMultipleOffers: acceptMultipleOffers,
-        exchangeLocation: exchangeLocation,
-        contactMethod: contactMethod,
-        showContactInfo: showContactInfo,
         userId: user.uid,
         createdAt: Timestamp.now(),
       );
@@ -238,16 +226,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   List<File> _images = [];
-  File? _videoFile;
   String? _selectedCategory;
   String? _selectedCondition;
   String? _selectedUsageDuration;
   final TextEditingController _reasonForBarterController = TextEditingController();
-  final TextEditingController _preferredExchangeController = TextEditingController();
-  bool _willingToAcceptMultipleOffers = false;
-  final TextEditingController _locationController = TextEditingController();
-  String? _selectedContactMethod;
-  bool _showContactInformation = false;
 
   // Submit Form
   Future<void> _submitForm() async {
@@ -283,12 +265,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
         usageDuration: _selectedUsageDuration!,
         reasonForBarter: _reasonForBarterController.text.trim(),
         images: _images,
-        videoFile: _videoFile,
-        preferredExchange: _preferredExchangeController.text.trim(),
-        acceptMultipleOffers: _willingToAcceptMultipleOffers,
-        exchangeLocation: _locationController.text.trim(),
-        contactMethod: _selectedContactMethod!,
-        showContactInfo: _showContactInformation,
       );
 
       // Handle success
