@@ -38,7 +38,7 @@ class MenuWidget extends StatelessWidget {
             leading: Icon(Icons.home),
             title: Text('Home'),
             onTap: () {
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/home');
             },
           ),
@@ -46,7 +46,7 @@ class MenuWidget extends StatelessWidget {
             leading: Icon(Icons.category),
             title: Text('Categories'),
             onTap: () {
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/category');
             },
           ),
@@ -54,23 +54,23 @@ class MenuWidget extends StatelessWidget {
             leading: Icon(Icons.add),
             title: Text('Add Item'),
             onTap: () {
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/additem');
             },
           ),
-          /*ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Cart'),
+          ListTile(
+            leading: Icon(Icons.chat),
+            title: Text('Chats'),
             onTap: () {
-              Navigator.pop(context); // Close the drawer
-              Navigator.pushReplacementNamed(context, '/cart');
+              Navigator.pop(context);
+              Navigator.pushReplacementNamed(context, '/chatlist');
             },
-          ),*/
+          ),
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),
             onTap: () {
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/userprofile');
             },
           ),
@@ -78,7 +78,7 @@ class MenuWidget extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/settings');
             },
           ),
@@ -86,7 +86,7 @@ class MenuWidget extends StatelessWidget {
             leading: Icon(Icons.logout),
             title: Text('Logout'),
             onTap: () {
-              Navigator.pop(context); // Close the drawer
+              Navigator.pop(context);
               Navigator.pushReplacementNamed(context, '/login');
               // Implement logout functionality
             },

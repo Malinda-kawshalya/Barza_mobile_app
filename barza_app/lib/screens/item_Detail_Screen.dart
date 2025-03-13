@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/exchange_requests_model.dart';
+import 'chat_screen.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final String itemId;
@@ -112,6 +113,38 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     );
   }
 
+  void _startChat(String itemOwnerId) async {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please log in to chat with the owner.')));
+    return;
+  }
+
+  String currentUserId = user.uid;
+  if (currentUserId == itemOwnerId) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('You cannot chat with yourself.')));
+    return;
+  }
+
+  // Create a unique chat ID
+  String chatId = currentUserId.hashCode <= itemOwnerId.hashCode
+      ? '$currentUserId\_$itemOwnerId'
+      : '$itemOwnerId\_$currentUserId';
+
+  // Navigate to the ChatScreen
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ChatScreen(
+        chatId: chatId,
+        otherUserId: itemOwnerId,
+      ),
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -219,17 +252,17 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     child: Text('Request Exchange', style: TextStyle(color: Colors.white)),
                   ),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      print('chat with the owner: ${widget.itemId}');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0C969C),
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      textStyle: TextStyle(fontSize: 18),
-                    ),
-                    child: Text('Chat with Owner', style: TextStyle(color: Colors.white)),
-                  ),
+                 ElevatedButton(
+  onPressed: () => _startChat(itemData['userId']),
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Color(0xFF0C969C),
+    padding: EdgeInsets.symmetric(vertical: 15),
+    textStyle: TextStyle(fontSize: 18),
+  ),
+  child: Text('Chat with Owner', style: TextStyle(color: Colors.white)),
+),
+
+
                 ],
               ),
             );

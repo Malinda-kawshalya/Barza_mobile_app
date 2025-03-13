@@ -4,6 +4,7 @@ class ConfirmedItem {
   String? id;
   String itemId;
   String itemName;
+  String description;
   String userId;
   double rating;
   String comment;
@@ -16,6 +17,7 @@ class ConfirmedItem {
     this.id,
     required this.itemId,
     required this.itemName,
+    required this.description,
     required this.userId,
     required this.rating,
     required this.comment,
@@ -32,6 +34,7 @@ class ConfirmedItem {
       id: doc.id,
       itemId: data['itemId'] ?? '',
       itemName: data['itemName'] ?? '',
+      description: data['description'] ?? '',
       userId: data['userId'] ?? '',
       rating: (data['rating'] ?? 0).toDouble(),
       comment: data['comment'] ?? '',
@@ -47,6 +50,7 @@ class ConfirmedItem {
     return {
       'itemId': itemId,
       'itemName': itemName,
+      'description': description,
       'userId': userId,
       'rating': rating,
       'comment': comment,
