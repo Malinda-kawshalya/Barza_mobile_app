@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'call_now_page.dart'; // Import the CallPage
+import 'send_email.dart'; // Import the SendEmailPage
 
 class HelpCenterPage extends StatelessWidget {
   @override
@@ -16,10 +18,11 @@ class HelpCenterPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 "Help Center",
@@ -52,7 +55,12 @@ class HelpCenterPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CallPage()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF0C969C), // Call Now Button Color
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -62,7 +70,12 @@ class HelpCenterPage extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SendEmailPage()),
+                      );
+                    },
                     style: OutlinedButton.styleFrom(
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -73,42 +86,24 @@ class HelpCenterPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                     border: Border.all(color: Color(0xFF0C969C), width: 2),
-                     borderRadius: BorderRadius.circular(12),
-                    color: Color.fromARGB(255, 246, 248, 248)
-                   
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                      "FAQ",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF0C969C)),
-                      ),
-                      SizedBox(height: 10),
-                      Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                        
-                        ),
-                        child: ListView(
-                        children: [
-                          FAQTile(question: "What is this app about?", answer: "This app helps with bartering."),
-                          FAQTile(question: "How does bartering work on this app?", answer: "Users can exchange goods or services."),
-                          FAQTile(question: "Is the app free to use?", answer: "Yes, this app is completely free."),
-                          FAQTile(question: "How do I create an account?", answer: "You can sign up from the login page."),
-                          FAQTile(question: "How do I create an account?", answer: "You can sign up from the login page."),
-                          FAQTile(question: "How do I create an account?", answer: "You can sign up from the login page."),
-                        ],
-                        ),
-                      ),
-                      ),
-                    ],
-                  ),
+              Text(
+                "FAQ",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0C969C),
                 ),
+              ),
+              SizedBox(height: 10),
+              Column(
+                children: [
+                  FAQTile(question: "What is this app about?", answer: "This app helps with bartering."),
+                  FAQTile(question: "How does bartering work on this app?", answer: "Users can exchange goods or services."),
+                  FAQTile(question: "Is the app free to use?", answer: "Yes, this app is completely free."),
+                  FAQTile(question: "How do I create an account?", answer: "You can sign up from the login page."),
+                  FAQTile(question: "How do I reset my password?", answer: "You can reset your password from the login page by clicking on 'Forgot Password'."),
+                  FAQTile(question: "How do I contact support?", answer: "You can contact support via the 'Call Now' or 'Send Email' buttons above."),
+                ],
               ),
             ],
           ),
