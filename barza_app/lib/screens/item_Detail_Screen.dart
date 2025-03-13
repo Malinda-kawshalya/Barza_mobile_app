@@ -15,6 +15,7 @@ class ItemDetailScreen extends StatefulWidget {
 
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
   late Future<DocumentSnapshot> _itemFuture;
+  int _currentImageIndex = 0;
 
   @override
   void initState() {
@@ -48,7 +49,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
       if (requestingUserId == itemOwnerId) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('You cannot request an exchange for your own item.')));
+            content:
+                Text('You cannot request an exchange for your own item.')));
         return;
       }
 
@@ -67,10 +69,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       if (userItems.docs.length == 1) {
         // Only one item, use it directly
         String offeredItemId = userItems.docs.first.id;
-        _createExchangeRequest(requestingUserId, widget.itemId, itemOwnerId, offeredItemId);
+        _createExchangeRequest(
+            requestingUserId, widget.itemId, itemOwnerId, offeredItemId);
       } else {
         // Multiple items, show selection screen
-        _showItemSelectionScreen(userItems.docs, requestingUserId, widget.itemId, itemOwnerId);
+        _showItemSelectionScreen(
+            userItems.docs, requestingUserId, widget.itemId, itemOwnerId);
       }
     } catch (e) {
       print('Error sending exchange request: $e');
@@ -79,7 +83,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     }
   }
 
-  void _createExchangeRequest(String requestingUserId, String requestedItemId, String itemOwnerId, String offeredItemId) async {
+  void _createExchangeRequest(String requestingUserId, String requestedItemId,
+      String itemOwnerId, String offeredItemId) async {
     ExchangeRequest exchangeRequest = ExchangeRequest(
       requestId: '',
       requestingUserId: requestingUserId,
@@ -98,14 +103,16 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         .showSnackBar(SnackBar(content: Text('Exchange request sent!')));
   }
 
-  void _showItemSelectionScreen(List<DocumentSnapshot> items, String requestingUserId, String requestedItemId, String itemOwnerId) {
+  void _showItemSelectionScreen(List<DocumentSnapshot> items,
+      String requestingUserId, String requestedItemId, String itemOwnerId) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ItemSelectionScreen(
           items: items,
           onItemSelected: (selectedItemId) {
-            _createExchangeRequest(requestingUserId, requestedItemId, itemOwnerId, selectedItemId);
+            _createExchangeRequest(
+                requestingUserId, requestedItemId, itemOwnerId, selectedItemId);
             Navigator.pop(context); // Close selection screen
           },
         ),
@@ -114,45 +121,40 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   }
 
   void _startChat(String itemOwnerId) async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please log in to chat with the owner.')));
-    return;
-  }
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please log in to chat with the owner.')));
+      return;
+    }
 
-  String currentUserId = user.uid;
-  if (currentUserId == itemOwnerId) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('You cannot chat with yourself.')));
-    return;
-  }
+    String currentUserId = user.uid;
+    if (currentUserId == itemOwnerId) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('You cannot chat with yourself.')));
+      return;
+    }
 
-  // Create a unique chat ID
-  String chatId = currentUserId.hashCode <= itemOwnerId.hashCode
-      ? '$currentUserId\_$itemOwnerId'
-      : '$itemOwnerId\_$currentUserId';
+    // Create a unique chat ID
+    String chatId = currentUserId.hashCode <= itemOwnerId.hashCode
+        ? '$currentUserId\_$itemOwnerId'
+        : '$itemOwnerId\_$currentUserId';
 
-  // Navigate to the ChatScreen
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ChatScreen(
-        chatId: chatId,
-        otherUserId: itemOwnerId,
+    // Navigate to the ChatScreen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(
+          chatId: chatId,
+          otherUserId: itemOwnerId,
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Item Details'),
-        backgroundColor: Color(0xFF0C969C),
-      ),
       body: FutureBuilder<DocumentSnapshot>(
         future: _itemFuture,
         builder: (context, snapshot) {
@@ -164,112 +166,219 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             var itemData = snapshot.data!.data() as Map<String, dynamic>;
             List<dynamic> images = itemData['images'] ?? [];
 
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListView(
-                children: [
- Container(
-                    height: 300,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
+            return CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 350.0,
+                  floating: false,
+                  pinned: true,
+                  backgroundColor: Color(0xFF0C969C),
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Stack(
+                      children: [
+                        PageView.builder(
+                          itemCount: images.isEmpty ? 1 : images.length,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _currentImageIndex = index;
+                            });
+                          },
+                          itemBuilder: (context, index) {
+                            return images.isNotEmpty
+                                ? Image.network(
+                                    images[index],
+                                    fit: BoxFit.cover,
+                                  )
+                                : Container(
+                                    color: Colors.grey[200],
+                                    child: Icon(Icons.image_not_supported,
+                                        size: 100, color: Colors.grey[400]),
+                                  );
+                          },
                         ),
+                        if (images.length > 1)
+                          Positioned(
+                            bottom: 16,
+                            left: 0,
+                            right: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(
+                                images.length,
+                                (index) => Container(
+                                  width: 8,
+                                  height: 8,
+                                  margin: EdgeInsets.symmetric(horizontal: 4),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _currentImageIndex == index
+                                        ? Color(0xFF0C969C)
+                                        : Colors.white.withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: images.isNotEmpty
-                          ? Image.network(
-                              images[0],
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            )
-                          : Container(
-                              color: Colors.grey[300],
-                              child: Icon(Icons.image, size: 100, color: Colors.grey[600]),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                itemData['itemName'] ?? 'Unknown Item',
+                                style: TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
                             ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: Color(0xFF0C969C).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.star,
+                                      color: Colors.amber, size: 20),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    itemData['rating']?.toString() ?? 'N/A',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF0C969C),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: [
+                            _buildChip(
+                                Icons.category, itemData['category'] ?? 'N/A'),
+                            _buildChip(Icons.check_circle,
+                                itemData['condition'] ?? 'N/A'),
+                          ],
+                        ),
+                        SizedBox(height: 24),
+                        Text(
+                          'Description',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Container(
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            itemData['description'] ??
+                                'No description available.',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black87,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 32),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () => _sendExchangeRequest(itemData),
+                                icon:
+                                    Icon(Icons.swap_horiz, color: Colors.white),
+                                label: Text('Request Exchange',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16)),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFF0C969C),
+                                  padding: EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  elevation: 2,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 1,
+                                    blurRadius: 3,
+                                    offset: Offset(0, 1),
+                                  ),
+                                ],
+                              ),
+                              child: IconButton(
+                                onPressed: () => _startChat(itemData['userId']),
+                                icon: Icon(Icons.chat_bubble_outline,
+                                    color: Color(0xFF0C969C), size: 28),
+                                padding: EdgeInsets.all(12),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Text(
-                    itemData['itemName'] ?? 'Unknown Item',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF0C969C),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Category: ${itemData['category'] ?? 'N/A'}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Condition: ${itemData['condition'] ?? 'N/A'}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Rating: ${itemData['rating'] ?? 'No rating'} ⭐',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.amber[700],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'description: ${itemData['description'] ?? 'No comments'}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                  
-
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () => _sendExchangeRequest(itemData), // Call sendExchangeRequest
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0C969C),
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      textStyle: TextStyle(fontSize: 18),
-                    ),
-                    child: Text('Request Exchange', style: TextStyle(color: Colors.white)),
-                  ),
-
-                 ElevatedButton(
-  onPressed: () => _startChat(itemData['userId']),
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Color(0xFF0C969C),
-    padding: EdgeInsets.symmetric(vertical: 15),
-    textStyle: TextStyle(fontSize: 18),
-  ),
-  child: Text('Chat with Owner', style: TextStyle(color: Colors.white)),
-),
-
-
-                ],
-              ),
+                ),
+              ],
             );
           } else {
             return Center(child: Text('Item not found'));
           }
         },
+      ),
+    );
+  }
+
+  Widget _buildChip(IconData icon, String label) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: Color(0xFF0C969C)),
+          SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+        ],
       ),
     );
   }
@@ -284,16 +393,50 @@ class ItemSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Select Item to Offer')),
+      appBar: AppBar(
+        title: Text('Select Item to Offer'),
+        backgroundColor: Color(0xFF0C969C),
+      ),
       body: ListView.builder(
+        padding: EdgeInsets.all(12),
         itemCount: items.length,
         itemBuilder: (context, index) {
           var itemData = items[index].data() as Map<String, dynamic>;
-          return ListTile(
-            title: Text(itemData['itemName'] ?? 'Unknown Item'),
-            onTap: () {
-              onItemSelected(items[index].id);
-            },
+          List<dynamic> images = itemData['images'] ?? [];
+
+          return Card(
+            elevation: 2,
+            margin: EdgeInsets.symmetric(vertical: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              contentPadding: EdgeInsets.all(12),
+              leading: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  image: images.isNotEmpty
+                      ? DecorationImage(
+                          image: NetworkImage(images[0]),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+                child: images.isEmpty
+                    ? Icon(Icons.image, color: Colors.grey)
+                    : null,
+              ),
+              title: Text(
+                itemData['itemName'] ?? 'Unknown Item',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(itemData['category'] ?? 'N/A'),
+              onTap: () {
+                onItemSelected(items[index].id);
+              },
+            ),
           );
         },
       ),
