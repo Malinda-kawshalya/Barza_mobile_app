@@ -49,97 +49,97 @@ class HomeScreen extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 5),
-                        height: 40,
-                        width: 300,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Search for items",
-                            hintStyle: TextStyle(
-                              color: const Color.fromARGB(255, 170, 167, 167),
-                            ),
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      Icon(
-                        Icons.search,
-                        color: Colors.grey,
-                      )
-                    ],
-                  ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                height: 50,
+                decoration: BoxDecoration(
+                color: Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(20),
                 ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Categories",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      IconButton(
-                        icon:
-                            Icon(Icons.arrow_forward_ios, color: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CategoryScreen()), // Use CategoryScreen
-                          );
-                        },
-                      ),
-                    ],
+                child: Row(
+                children: [
+                  Container(
+                  margin: EdgeInsets.only(left: 5),
+                  height: 40,
+                  width: 300,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                    hintText: "Search for items",
+                    hintStyle: TextStyle(
+                      color: const Color.fromARGB(255, 170, 167, 167),
+                    ),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    ),
                   ),
-                ),
-                Category(),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Recent Items",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      IconButton(
-                        icon:
-                            Icon(Icons.arrow_forward_ios, color: Colors.black),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AllItemsScreen()),
-                          );
-                        },
-                      ),
-                    ],
                   ),
+                  Icon(
+                  Icons.search,
+                  color: Colors.grey,
+                  )
+                ],
                 ),
-                Items(),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                  "Categories",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  ),
+                  IconButton(
+                  icon:
+                    Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                        CategoryScreen()), // Use CategoryScreen
+                    );
+                  },
+                  ),
+                ],
+                ),
+              ),
+              Category(),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                  "Recent Items",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  ),
+                  IconButton(
+                  icon:
+                    Icon(Icons.arrow_forward_ios, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AllItemsScreen()),
+                    );
+                  },
+                  ),
+                ],
+                ),
+              ),
+              Items(limit: 8), 
               ],
             ),
           )

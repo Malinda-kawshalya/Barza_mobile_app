@@ -6,7 +6,7 @@ import '../models/confirmed_item_model.dart';
 class Items extends StatefulWidget {
   final String? category; // Add category parameter
 
-  Items({this.category});
+  Items({this.category, required int limit});
   @override
   _ItemsState createState() => _ItemsState();
 }

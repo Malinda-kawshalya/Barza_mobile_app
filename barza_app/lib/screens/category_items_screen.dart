@@ -13,7 +13,10 @@ class SpecificCategoryItemsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(category),
       ),
-      body: Items(category: category), // Pass the category here
+      body: Items(
+        category: category,
+        limit: 0,
+      ),
     );
   }
 }
