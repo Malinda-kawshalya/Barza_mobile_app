@@ -10,12 +10,6 @@ class BarterItem {
   String usageDuration;
   String? reasonForBarter;
   List<String> images;
-  String? videoUrl;
-  String preferredExchange;
-  bool acceptMultipleOffers;
-  String exchangeLocation;
-  String contactMethod;
-  bool showContactInfo;
   Timestamp? createdAt;
   String? userId;
   String status;
@@ -30,12 +24,6 @@ class BarterItem {
     required this.usageDuration,
     this.reasonForBarter,
     this.images = const [],
-    this.videoUrl,
-    required this.preferredExchange,
-    this.acceptMultipleOffers = false,
-    required this.exchangeLocation,
-    required this.contactMethod,
-    this.showContactInfo = false,
     this.createdAt,
     this.userId,
     this.status = 'active',
@@ -54,12 +42,6 @@ class BarterItem {
       usageDuration: data['usageDuration'] ?? '',
       reasonForBarter: data['reasonForBarter'],
       images: List<String>.from(data['images'] ?? []),
-      videoUrl: data['videoUrl'],
-      preferredExchange: data['preferredExchange'] ?? '',
-      acceptMultipleOffers: data['acceptMultipleOffers'] ?? false,
-      exchangeLocation: data['exchangeLocation'] ?? '',
-      contactMethod: data['contactMethod'] ?? '',
-      showContactInfo: data['showContactInfo'] ?? false,
       createdAt: data['createdAt'],
       userId: data['userId'],
       status: data['status'] ?? 'active',
@@ -77,12 +59,6 @@ class BarterItem {
       'usageDuration': usageDuration,
       'reasonForBarter': reasonForBarter,
       'images': images,
-      'videoUrl': videoUrl,
-      'preferredExchange': preferredExchange,
-      'acceptMultipleOffers': acceptMultipleOffers,
-      'exchangeLocation': exchangeLocation,
-      'contactMethod': contactMethod,
-      'showContactInfo': showContactInfo,
       'createdAt': createdAt ?? FieldValue.serverTimestamp(),
       'userId': userId,
       'status': status,
