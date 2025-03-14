@@ -191,7 +191,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
 
                     // Stars/Rating
-                    
+
                     SizedBox(height: 30),
 
                     // Personal Information
@@ -279,10 +279,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
-      bottomNavigationBar: CustomBottomNavBar(
-        selectedIndex: 4, // Highlight 'Home'
-        onItemTapped: (index) => _navigateToPage(context, index),
-      ),
     );
   }
 
@@ -341,25 +337,5 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         SizedBox(height: 16),
       ],
     );
-  }
-}
-
-void _navigateToPage(BuildContext context, int index) {
-  String routeName = '';
-
-  if (index == 0) {
-    routeName = '/home';
-  } else if (index == 1) {
-    routeName = '/category';
-  } else if (index == 2) {
-    routeName = '/additem';
-  } else if (index == 3) {
-    routeName = '/allitems';
-  } else if (index == 4) {
-    routeName = '/profile';
-  }
-
-  if (ModalRoute.of(context)?.settings.name != routeName) {
-    Navigator.pushReplacementNamed(context, routeName);
   }
 }
