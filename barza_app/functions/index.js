@@ -57,8 +57,7 @@ exports.onExchangeRequestCreated = onDocumentCreated(
       await admin.firestore().collection("notifications").add({
         userId: newDocument.itemOwnerId,
         type: "exchange_request",
-        message: `You have a request to exchange item ID: ${
-          newDocument.requestedItemId}.`,
+        message: "You have a request to exchage your item.",
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
         read: false,
         relatedItemId: newDocument.requestedItemId,
@@ -68,5 +67,70 @@ exports.onExchangeRequestCreated = onDocumentCreated(
     } else {
       console.error("itemOwnerId or requestedItemId is missing.");
     }
+  },
+);
+
+exports.onChatCreated = onDocumentCreated(
+  "chats/{chatId}",
+  async (event) => {
+    const chatData = event.data.data();
+    const chatId = event.params.chatId;
+
+    if (!chatData.participants || chatData.participants.length !== 2) {
+      console.error(`Invalid chat document structure for chat ${chatId}.`);
+      return;
+    }
+
+    const messagesSnapshot = await admin
+      .firestore()
+      .collection("chats")
+      .doc(chatId)
+      .collection("messages")
+      .orderBy("timestamp", "desc")
+      .limit(1)
+      .get();
+
+    if (messagesSnapshot.empty) {
+      console.log(`No messages found in new chat ${chatId}.`);
+      return;
+    }
+    const firstMessage = messagesSnapshot.docs[0].data();
+    const senderUserId = firstMessage.senderId;
+
+    const recipientUserId = chatData.participants.find(
+      (id) => id !== senderUserId);
+    if (!recipientUserId) {
+      console.error(`Could not determine recipient for chat ${chatId}.`);
+      return;
+    }
+
+    let senderName = "Someone";
+    try {
+      const senderDoc = await admin.firestore().collection(
+        "users").doc(senderUserId).get();
+      if (senderDoc.exists) {
+        const senderData = senderDoc.data();
+        senderName = senderData.fullName || senderName;
+      }
+    } catch (error) {
+      console.error(`Error fetching sender data: ${error}`);
+    }
+
+    await admin.firestore().collection("notifications").add({
+      userId: recipientUserId,
+      type: "new_chat",
+      message: `${senderName} sent you a message:
+       "${firstMessage.message.substring(0, 50)}
+       ${firstMessage.message.length > 50 ? "..." : ""}"`,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      read: false,
+      senderId: senderUserId,
+      chatId: chatId,
+    });
+
+    console.log(
+      `Notification created for new chat ${chatId} 
+      from user ${senderUserId} to ${recipientUserId}`,
+    );
   },
 );

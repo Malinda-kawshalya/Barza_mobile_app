@@ -14,35 +14,86 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController messageController = TextEditingController();
+  bool isChatInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkChatExists();
+  }
+
+  // Check if this is a new or existing chat
+  void checkChatExists() async {
+    final chatDoc = await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(widget.chatId)
+        .get();
+    
+    setState(() {
+      isChatInitialized = chatDoc.exists;
+    });
+  }
 
   void sendMessage() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null || messageController.text.trim().isEmpty) return;
 
     String currentUserId = user.uid;
+    String messageText = messageController.text.trim();
+    
+    // First time creating this chat
+    if (!isChatInitialized) {
+      // Get other user's display name for the chat
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.otherUserId)
+          .get();
+      
+      String? otherUserName = userDoc.exists ? 
+          (userDoc.data() as Map<String, dynamic>)['fullName'] : null;
+      
+      // Create the chat document (this will trigger the notification)
+      await FirebaseFirestore.instance
+          .collection('chats')
+          .doc(widget.chatId)
+          .set({
+        'participants': [currentUserId, widget.otherUserId],
+        'lastMessage': messageText,
+        'timestamp': FieldValue.serverTimestamp(),
+        'fullName': otherUserName,
+      });
+      
+      setState(() {
+        isChatInitialized = true;
+      });
+    } else {
+      // Just update the existing chat document
+      await FirebaseFirestore.instance
+          .collection('chats')
+          .doc(widget.chatId)
+          .update({
+        'lastMessage': messageText,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    }
 
+    // Add the new message to the messages subcollection
     await FirebaseFirestore.instance
         .collection('chats')
         .doc(widget.chatId)
         .collection('messages')
         .add({
       'senderId': currentUserId,
-      'text': messageController.text.trim(),
+      'text': messageText,
       'timestamp': FieldValue.serverTimestamp(),
     });
 
-    // Update last message in the chat document
-    await FirebaseFirestore.instance
-        .collection('chats')
-        .doc(widget.chatId)
-        .set({
-      'participants': [currentUserId, widget.otherUserId],
-      'lastMessage': messageController.text.trim(),
-      'timestamp': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-
     messageController.clear();
   }
+
+  // Rest of your chat screen code remains the same
+  // ...
+
 
   @override
   Widget build(BuildContext context) {
