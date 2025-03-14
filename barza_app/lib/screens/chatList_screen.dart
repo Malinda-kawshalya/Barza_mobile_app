@@ -12,6 +12,12 @@ class ChatListScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Chats"),
         backgroundColor: Color(0xFF0C969C),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/home');
+          },
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance

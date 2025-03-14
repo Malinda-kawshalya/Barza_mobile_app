@@ -3,8 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/confirmed_item_model.dart';
 import '../models/exchange_requests_model.dart';
-import '../services/chat_service.dart';
-import 'chat_screen.dart';
+import '../screens/chat_screen.dart';
 
 class ExchangeRequestDetailsScreen extends StatelessWidget {
   final String exchangeRequestId;
@@ -45,14 +44,12 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
               children: [
                 _buildSectionTitle("Requested Item"),
                 _buildItemDetails(exchangeRequest.requestedItemId),
-
                 SizedBox(height: 16),
                 _buildSectionTitle("Offered Item"),
                 exchangeRequest.offeredItemId != null
                     ? _buildItemDetails(exchangeRequest.offeredItemId!)
                     : Text("No item was offered in exchange",
                         style: TextStyle(fontStyle: FontStyle.italic)),
-
                 SizedBox(height: 24),
                 _buildStatusAndActions(context, exchangeRequest),
               ],
@@ -80,7 +77,9 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
         if (itemSnapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
-        if (itemSnapshot.hasError || !itemSnapshot.hasData || !itemSnapshot.data!.exists) {
+        if (itemSnapshot.hasError ||
+            !itemSnapshot.hasData ||
+            !itemSnapshot.data!.exists) {
           return Text("Item details not found",
               style: TextStyle(color: Colors.red, fontStyle: FontStyle.italic));
         }
@@ -88,7 +87,8 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
         return Card(
           elevation: 3,
           margin: EdgeInsets.only(top: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
             padding: EdgeInsets.all(12),
             child: Column(
@@ -102,7 +102,8 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
                   ),
                 SizedBox(height: 8),
                 Text(confirmedItem.itemName,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 Text(confirmedItem.description,
                     style: TextStyle(color: Colors.grey[700])),
               ],
@@ -113,52 +114,52 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusAndActions(BuildContext context, ExchangeRequest exchangeRequest) {
+  Widget _buildStatusAndActions(
+      BuildContext context, ExchangeRequest exchangeRequest) {
     final currentUser = FirebaseAuth.instance.currentUser?.uid;
 
     return Column(
       children: [
-        Text("Status: ${exchangeRequest.status}",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue)),
-
+        Text("Request: ${exchangeRequest.status}",
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue)),
         SizedBox(height: 16),
-
-        if (exchangeRequest.status == 'pending' && exchangeRequest.itemOwnerId == currentUser)
+        if (exchangeRequest.status == 'pending' &&
+            exchangeRequest.itemOwnerId == currentUser)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                onPressed: () => _updateStatus(context, 'accepted', exchangeRequest),
+                onPressed: () =>
+                    _updateStatus(context, 'accepted', exchangeRequest),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 child: Text("Accept"),
               ),
               ElevatedButton(
-                onPressed: () => _updateStatus(context, 'declined', exchangeRequest),
+                onPressed: () =>
+                    _updateStatus(context, 'declined', exchangeRequest),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: Text("Decline"),
               ),
             ],
           ),
-
-        if (exchangeRequest.status == 'accepted')
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: ElevatedButton.icon(
-              onPressed: () => openChat(context, exchangeRequest),
-              icon: Icon(Icons.chat, color: Colors.white),
-              label: Text("Chat with User"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF0C969C),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                textStyle: TextStyle(fontSize: 16),
-              ),
-            ),
+         SizedBox(height: 20),
+        ElevatedButton.icon(
+          onPressed: () => _startChat(context, exchangeRequest.requestingUserId),
+          icon: Icon(Icons.chat, color: Colors.white),
+          label: Text("Chat with Owner"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.teal,
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
+        ),
       ],
     );
   }
 
-  void _updateStatus(BuildContext context, String newStatus, ExchangeRequest request) async {
+  void _updateStatus(
+      BuildContext context, String newStatus, ExchangeRequest request) async {
     try {
       await FirebaseFirestore.instance
           .collection('exchange_requests')
@@ -173,20 +174,33 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
     }
   }
 
-  String getChatId(String user1, String user2) {
-    List<String> sortedUsers = [user1, user2]..sort();
-    return "${sortedUsers[0]}_${sortedUsers[1]}";
-  }
+  void _startChat(BuildContext context, String ownerId) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please log in to chat with the owner.')));
+      return;
+    }
 
-  void openChat(BuildContext context, ExchangeRequest exchangeRequest) {
-    String chatId = getChatId(exchangeRequest.requestingUserId, exchangeRequest.itemOwnerId);
+    String currentUserId = user.uid;
+    if (currentUserId == ownerId) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('You cannot chat with yourself.')));
+      return;
+    }
 
+    // Create a unique chat ID
+    String chatId = currentUserId.hashCode <= ownerId.hashCode
+        ? '$currentUserId\_$ownerId'
+        : '$ownerId\_$currentUserId';
+
+    // Navigate to the ChatScreen
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChatScreen(
           chatId: chatId,
-          otherUserId: exchangeRequest.itemOwnerId, 
+          otherUserId: ownerId,
         ),
       ),
     );

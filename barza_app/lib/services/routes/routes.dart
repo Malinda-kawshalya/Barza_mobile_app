@@ -15,7 +15,6 @@ import '/screens/buy_starts_page.dart';
 import '/screens/chatList_screen.dart';
 import '/screens/call_now_page.dart';
 import '/screens/send_email.dart';  
-//import '/screens/wishlist_screen.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -54,6 +53,5 @@ class AppRoutes {
     chatlist: (context) => ChatListScreen(),
     callnow: (context) => CallPage(),
     sendemail: (context) => SendEmailPage(),
-    //wishlist: (context) => WishlistScreen(),
   };
 }

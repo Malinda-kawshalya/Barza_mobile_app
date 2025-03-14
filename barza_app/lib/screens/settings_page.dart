@@ -48,7 +48,7 @@ class SettingsPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.black),
             onPressed: () {
-              // Notification action would go here
+            Navigator.pushReplacementNamed(context, '/notifications');
             },
           ),
         ],

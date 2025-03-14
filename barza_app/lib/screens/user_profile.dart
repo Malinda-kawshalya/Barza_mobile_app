@@ -171,12 +171,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
                     // Stars/Rating
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        _ratingStars,
-                        (index) =>
-                            Icon(Icons.star, color: Colors.amber, size: 20),
-                      ),
+                     
                     ),
                     SizedBox(height: 30),
 
