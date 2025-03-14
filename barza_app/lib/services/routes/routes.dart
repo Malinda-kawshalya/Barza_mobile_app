@@ -14,7 +14,7 @@ import '/screens/privacy_permissions.dart';
 import '/screens/buy_starts_page.dart';
 import '/screens/chatList_screen.dart';
 import '/screens/call_now_page.dart';
-import '/screens/send_email.dart';  
+import '/screens/send_email.dart';
 import '/screens/profile.dart';
 
 class AppRoutes {

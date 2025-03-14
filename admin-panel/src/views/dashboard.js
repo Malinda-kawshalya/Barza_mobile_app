@@ -1,12 +1,12 @@
-import React, { useState, useEffect, } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-
 import {
   getFirestore,
   collection,
   getDocs,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const AdminDashboard = () => {
@@ -163,6 +163,22 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error(`Error updating item to ${newStatus}:`, error);
       alert(`Failed to update item status. Please try again.`);
+    }
+  };
+
+  // Handle barter item deletion
+  const handleDeleteItem = async (id) => {
+    try {
+      const db = getFirestore();
+      const itemRef = doc(db, "barter_items", id);
+      await deleteDoc(itemRef);
+
+      // Update local state after successful Firebase deletion
+      setBarterItems(barterItems.filter((item) => item.id !== id));
+      console.log("Item deleted successfully from Firestore.");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      alert("Failed to delete item. Please try again.");
     }
   };
 
@@ -472,6 +488,12 @@ const AdminDashboard = () => {
                                 Activate
                               </button>
                             )}
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={() => handleDeleteItem(item.id)}
+                            >
+                              Delete
+                            </button>
                           </div>
                         </td>
                       </tr>
