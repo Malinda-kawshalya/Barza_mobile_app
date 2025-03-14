@@ -1,18 +1,19 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:barza_app/models/profile_model.dart';
 import 'package:barza_app/services/profile_service.dart';
 import 'package:image_picker/image_picker.dart';
-import 'buy_starts_page.dart'; // Import the BuyStarsPage
+import 'dart:io';
+import './buy_starts_page.dart'; // Import the BuyStarsPage
 import '../widgets/bottom_navigationbar.dart';
+import 'user_profile.dart'; // Import the UserProfileScreen
 
-class UserProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   final _userProfileService = UserProfileService();
   UserProfile? _userProfile;
   bool _isLoading = true;
@@ -52,39 +53,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser == null) {
-      // User is not logged in, show a message or navigate to login
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please log in to update your profile photo.')),
-      );
-      // Optionally navigate to the login screen:
-      // Navigator.of(context).pushReplacementNamed('/login');
-      return; // Exit the method
-    }
-
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _isLoading = true;
-      });
-      try {
-        await _userProfileService.updateProfilePhoto(File(pickedFile.path));
-        _fetchUserProfile(); // Refresh profile after update
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error uploading image: $e')),
-        );
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +63,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Colors.teal),
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/profile');
+            Navigator.of(context).pushReplacementNamed('/home');
           },
         ),
         actions: [
@@ -115,10 +83,52 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
-                    // Profile avatar with edit button
-                    Stack(
-                      alignment: Alignment.bottomRight,
+                    // Profile avatar and user info
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UserProfileScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                _userProfile?.fullName ??
+                                    'User', // Display fullName
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              _userProfile?.email ?? 'xxx@gmail.com',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            // Rating stars
+                            Row(
+                              children: List.generate(10, (index) {
+                                return Icon(
+                                  index < _ratingStars
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: Colors.amber,
+                                );
+                              }),
+                            ),
+                          ],
+                        ),
                         Container(
                           width: 100,
                           height: 100,
@@ -140,67 +150,77 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: _pickImage,
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.orange,
-                            ),
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
+                      ],
+                    ),
+                    SizedBox(height: 30),
+
+                    // Total Exchanges
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Total Exchanges >',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    // Exchanges and Listings
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildProfileOption(
+                          context,
+                          'Exchanges',
+                          Icons.swap_horiz,
+                          Colors.teal,
+                        ),
+                        _buildProfileOption(
+                          context,
+                          'Listings',
+                          Icons.list,
+                          Colors.teal,
                         ),
                       ],
                     ),
-                    SizedBox(height: 15),
-
-                    // Username
-                    Text(
-                      _userProfile?.fullName ?? 'User', // Display fullName
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    // Stars/Rating
-                    Row(),
-                    SizedBox(height: 30),
-
-                    // Personal Information
-                    _buildInfoItem(
-                      context,
-                      'Your Email',
-                      _userProfile?.email ?? '',
-                      Icons.email,
-                    ),
-                    _buildInfoItem(
-                      context,
-                      'Phone Number',
-                      _userProfile?.phoneNumber ?? '',
-                      Icons.phone,
-                    ),
-                    _buildInfoItem(
-                      context,
-                      'Address',
-                      _userProfile?.address ?? '',
-                      Icons.email,
-                    ),
-                    _buildInfoItem(
-                      context,
-                      'Location',
-                      _userProfile?.location ?? '',
-                      Icons.location_on,
-                    ),
-
-                    // Buy Stars Button
                     SizedBox(height: 20),
+
+                    // History, Wish List, Coupons, Cards
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildProfileOption(
+                          context,
+                          'History',
+                          Icons.history,
+                          Colors.teal,
+                        ),
+                        _buildProfileOption(
+                          context,
+                          'Wish List',
+                          Icons.favorite_border,
+                          Colors.teal,
+                        ),
+                        _buildProfileOption(
+                          context,
+                          'Coupons',
+                          Icons.card_giftcard,
+                          Colors.teal,
+                        ),
+                        _buildProfileOption(
+                          context,
+                          'Cards',
+                          Icons.credit_card,
+                          Colors.teal,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+
+                    // Buy More Stars Button
                     Container(
                       width: double.infinity,
                       height: 50,
@@ -214,7 +234,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           );
                         },
                         child: Text(
-                          'Buy Stars',
+                          'BUY MORE STARS >',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -229,24 +249,27 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         ),
                       ),
                     ),
-
-                    // Logout Button
                     SizedBox(height: 20),
+
+                    // Help Center
                     Container(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: _signOut,
+                        onPressed: () {
+                          // Navigate to Help Center
+                        },
                         child: Text(
-                          'Logout',
+                          'Help Center\nNeed Help? Talk to us',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
@@ -259,65 +282,42 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
       bottomNavigationBar: CustomBottomNavBar(
-        selectedIndex: 4, // Highlight 'Home'
+        selectedIndex: 4, // Highlight 'Profile'
         onItemTapped: (index) => _navigateToPage(context, index),
       ),
     );
   }
 
-  Widget _buildInfoItem(
+  Widget _buildProfileOption(
     BuildContext context,
     String title,
-    String value,
     IconData iconData,
+    Color color,
   ) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            iconData,
+            color: color,
+            size: 30,
+          ),
+        ),
+        SizedBox(height: 8),
         Text(
           title,
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
-        SizedBox(height: 8),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: Colors.teal.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  iconData,
-                  color: Colors.teal,
-                  size: 20,
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    color: Colors.teal,
-                    fontSize: 14,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 16),
       ],
     );
   }
@@ -335,7 +335,7 @@ void _navigateToPage(BuildContext context, int index) {
   } else if (index == 3) {
     routeName = '/allitems';
   } else if (index == 4) {
-    routeName = '/profile';
+    routeName = '/userprofile';
   }
 
   if (ModalRoute.of(context)?.settings.name != routeName) {

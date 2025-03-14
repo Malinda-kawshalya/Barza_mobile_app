@@ -29,7 +29,6 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
-    
   }
 
   Future<List<ConfirmedItem>> _fetchItems() async {
@@ -76,7 +75,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     } else if (index == 3) {
       routeName = '/allitems';
     } else if (index == 4) {
-      routeName = '/userprofile';
+      routeName = '/profile';
     }
 
     if (ModalRoute.of(context)?.settings.name != routeName) {
