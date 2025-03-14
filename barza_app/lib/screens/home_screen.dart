@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (index == 3) {
       routeName = '/allitems';
     } else if (index == 4) {
-      routeName = '/profile';
+      routeName = '/userprofile';
     }
 
     if (ModalRoute.of(context)?.settings.name != routeName) {
@@ -187,8 +187,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        _searchQuery.isEmpty
-                            ? "Recent Items"
+                        _searchQuery.isEmpty 
+                            ? "Recent Items" 
                             : "Search Results",
                         style: TextStyle(
                           fontSize: 20,
@@ -217,8 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(
-                          child:
-                              Text('Failed to load items: ${snapshot.error}'));
+                          child: Text('Failed to load items: ${snapshot.error}'));
                     } else if (snapshot.hasData) {
                       return GridView.count(
                         shrinkWrap: true,
@@ -226,8 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         childAspectRatio: 0.68,
                         crossAxisCount: 2,
                         padding: EdgeInsets.all(10),
-                        children: _filteredItems.take(8).map((item) {
-                          // Limit the displayed items to 8
+                        children: _filteredItems.take(8).map((item) { // Limit the displayed items to 8
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -239,8 +237,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 8),
+                              margin:
+                                  EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15),
@@ -290,14 +288,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           item.itemName,
                                           style: TextStyle(
-                                            color:
-                                                Color.fromARGB(255, 2, 42, 44),
+                                            color: Color.fromARGB(255, 2, 42, 44),
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           ),
