@@ -1,6 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as p;
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
@@ -15,6 +19,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController messageController = TextEditingController();
   bool isChatInitialized = false;
+  final ImagePicker _picker = ImagePicker();
+  bool _isUploading = false;
 
   @override
   void initState() {
@@ -22,78 +28,103 @@ class _ChatScreenState extends State<ChatScreen> {
     checkChatExists();
   }
 
-  // Check if this is a new or existing chat
   void checkChatExists() async {
     final chatDoc = await FirebaseFirestore.instance
         .collection('chats')
         .doc(widget.chatId)
         .get();
-    
+
     setState(() {
       isChatInitialized = chatDoc.exists;
     });
   }
 
-  void sendMessage() async {
+  void sendMessage({String? mediaUrl}) async {
     User? user = FirebaseAuth.instance.currentUser;
-    if (user == null || messageController.text.trim().isEmpty) return;
+    if (user == null &&
+        messageController.text.trim().isEmpty &&
+        mediaUrl == null) return;
 
-    String currentUserId = user.uid;
+    String currentUserId = user!.uid;
     String messageText = messageController.text.trim();
-    
-    // First time creating this chat
+
     if (!isChatInitialized) {
-      // Get other user's display name for the chat
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.otherUserId)
           .get();
-      
-      String? otherUserName = userDoc.exists ? 
-          (userDoc.data() as Map<String, dynamic>)['fullName'] : null;
-      
-      // Create the chat document (this will trigger the notification)
+
+      String? otherUserName = userDoc.exists
+          ? (userDoc.data() as Map<String, dynamic>)['fullName']
+          : null;
+
       await FirebaseFirestore.instance
           .collection('chats')
           .doc(widget.chatId)
           .set({
         'participants': [currentUserId, widget.otherUserId],
-        'lastMessage': messageText,
+        'lastMessage': mediaUrl != null ? 'Media' : messageText,
         'timestamp': FieldValue.serverTimestamp(),
         'fullName': otherUserName,
       });
-      
+
       setState(() {
         isChatInitialized = true;
       });
     } else {
-      // Just update the existing chat document
       await FirebaseFirestore.instance
           .collection('chats')
           .doc(widget.chatId)
           .update({
-        'lastMessage': messageText,
+        'lastMessage': mediaUrl != null ? 'Media' : messageText,
         'timestamp': FieldValue.serverTimestamp(),
       });
     }
 
-    // Add the new message to the messages subcollection
     await FirebaseFirestore.instance
         .collection('chats')
         .doc(widget.chatId)
         .collection('messages')
         .add({
       'senderId': currentUserId,
-      'text': messageText,
+      'text': mediaUrl == null ? messageText : '',
       'timestamp': FieldValue.serverTimestamp(),
+      'mediaUrl': mediaUrl,
     });
 
     messageController.clear();
   }
 
-  // Rest of your chat screen code remains the same
-  // ...
+  Future<void> _sendMedia() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image == null) return;
 
+    setState(() {
+      _isUploading = true;
+    });
+
+    try {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('chat_media')
+          .child(widget.chatId)
+          .child(
+              '${DateTime.now().millisecondsSinceEpoch}${p.extension(image.path)}');
+
+      await ref.putFile(File(image.path));
+      final url = await ref.getDownloadURL();
+      sendMessage(mediaUrl: url);
+    } catch (e) {
+      print("Error uploading media: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload media.')),
+      );
+    } finally {
+      setState(() {
+        _isUploading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +132,6 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(title: Text("Chat")),
       body: Column(
         children: [
-          // Messages List
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -134,7 +164,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           color: isMe ? Colors.blue : Colors.grey[300],
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Text(message['text']),
+                        child: (message.data() as Map<String, dynamic>)
+                                    .containsKey('mediaUrl') &&
+                                message['mediaUrl'] != null
+                            ? Image.network(message['mediaUrl'], width: 200)
+                            : Text(message['text']),
                       ),
                     );
                   },
@@ -142,8 +176,6 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
-
-          // Message Input Field
           Padding(
             padding: EdgeInsets.all(8),
             child: Row(
@@ -158,12 +190,17 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
                 IconButton(
+                  icon: Icon(Icons.attach_file),
+                  onPressed: _isUploading ? null : _sendMedia,
+                ),
+                IconButton(
                   icon: Icon(Icons.send),
-                  onPressed: sendMessage,
+                  onPressed: _isUploading ? null : sendMessage,
                 ),
               ],
             ),
           ),
+          if (_isUploading) LinearProgressIndicator(),
         ],
       ),
     );
