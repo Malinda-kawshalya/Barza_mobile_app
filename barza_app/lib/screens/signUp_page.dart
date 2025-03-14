@@ -37,56 +37,57 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   Future<void> _signUpWithEmail() async {
-    if (_formKey.currentState!.validate()) {
-      if (_passwordController.text != _confirmPasswordController.text) {
-        setState(() {
-          _errorMessage = 'Passwords do not match';
-        });
-        return;
-      }
-
+  if (_formKey.currentState!.validate()) {
+    if (_passwordController.text != _confirmPasswordController.text) {
       setState(() {
-        _isLoading = true;
-        _errorMessage = null;
+        _errorMessage = 'Passwords do not match';
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Add user details to Firestore with default stars
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'fullName': _nameController.text.trim(),
+        'address': _addressController.text.trim(),
+        'email': _emailController.text.trim(),
+        'phoneNumber': _phoneController.text.trim(),
+        'stars': 3, // Default stars for new users
+        'createdAt': FieldValue.serverTimestamp(),
       });
 
-      try {
-        UserCredential userCredential =
-            await _auth.createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
-
-        // Add user details to Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
-          'fullName': _nameController.text.trim(),
-          'address': _addressController.text.trim(),
-          'email': _emailController.text.trim(),
-          'phoneNumber': _phoneController.text.trim(),
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = e.message ?? 'An error occurred';
+      });
+    } finally {
+      if (mounted) {
         setState(() {
-          _errorMessage = e.message ?? 'An error occurred';
+          _isLoading = false;
         });
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
       }
     }
   }
+}
 
   Widget _buildTextField(
       String label, bool isPassword, TextEditingController controller) {

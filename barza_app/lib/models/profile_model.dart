@@ -8,6 +8,7 @@ class UserProfile {
   String location;
   String? profileImageUrl; // Added profileImageUrl
   String? fullName;
+  int stars; // Added stars field
 
   UserProfile({
     this.id,
@@ -17,6 +18,7 @@ class UserProfile {
     required this.address,
     required this.location,
     required this.fullName,
+    required this.stars, // Required stars in constructor
   });
 
   // Convert UserProfile to a Map for Firestore
@@ -28,6 +30,7 @@ class UserProfile {
       'address': address,
       'location': location,
       'profileImageUrl': profileImageUrl, // Added profileImageUrl
+      'stars': stars, // Added stars
     };
   }
 
@@ -42,6 +45,7 @@ class UserProfile {
       address: data['address'] ?? '',
       location: data['location'] ?? '',
       profileImageUrl: data['profileImageUrl'] ?? '', // Added profileImageUrl
+      stars: data['stars'] ?? 3, // Default stars to 3 for new users
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/exchange_requests_model.dart';
 import 'chat_screen.dart';
+import 'item_selection_screen.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final String itemId;
@@ -308,7 +309,49 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           children: [
                             Expanded(
                               child: ElevatedButton.icon(
-                                onPressed: () => _sendExchangeRequest(itemData),
+                                onPressed: () async {
+                                  // Fetch user's stars and convert to double
+                                  DocumentSnapshot userDoc =
+                                      await FirebaseFirestore
+                                          .instance
+                                          .collection('users')
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                          .get();
+
+                                  // Convert user stars to double
+                                  double userStars = 0.0;
+                                  var userStarsData = (userDoc.data()
+                                      as Map<String, dynamic>)['stars'];
+                                  
+                                  if (userStarsData is int) {
+                                    userStars = userStarsData.toDouble();
+                                  } else if (userStarsData is double) {
+                                    userStars = userStarsData;
+                                  }
+
+                                  // Convert item rating to double
+                                  double itemRating = 0.0;
+                                  var itemRatingData = itemData['rating'];
+                                  
+                                  if (itemRatingData is int) {
+                                    itemRating = itemRatingData.toDouble();
+                                  } else if (itemRatingData is double) {
+                                    itemRating = itemRatingData;
+                                  }
+
+                                  if (userStars >= itemRating) {
+                                    _sendExchangeRequest(itemData);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'You need at least ${itemRating.toStringAsFixed(1)} stars to request this item.',
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
                                 icon:
                                     Icon(Icons.swap_horiz, color: Colors.white),
                                 label: Text('Request Exchange',
@@ -379,66 +422,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ItemSelectionScreen extends StatelessWidget {
-  final List<DocumentSnapshot> items;
-  final Function(String) onItemSelected;
-
-  ItemSelectionScreen({required this.items, required this.onItemSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Select Item to Offer'),
-        backgroundColor: Color(0xFF0C969C),
-      ),
-      body: ListView.builder(
-        padding: EdgeInsets.all(12),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          var itemData = items[index].data() as Map<String, dynamic>;
-          List<dynamic> images = itemData['images'] ?? [];
-
-          return Card(
-            elevation: 2,
-            margin: EdgeInsets.symmetric(vertical: 8),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              contentPadding: EdgeInsets.all(12),
-              leading: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  image: images.isNotEmpty
-                      ? DecorationImage(
-                          image: NetworkImage(images[0]),
-                          fit: BoxFit.cover,
-                        )
-                      : null,
-                ),
-                child: images.isEmpty
-                    ? Icon(Icons.image, color: Colors.grey)
-                    : null,
-              ),
-              title: Text(
-                itemData['itemName'] ?? 'Unknown Item',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(itemData['category'] ?? 'N/A'),
-              onTap: () {
-                onItemSelected(items[index].id);
-              },
-            ),
-          );
-        },
       ),
     );
   }

@@ -161,18 +161,37 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     SizedBox(height: 15),
 
                     // Username
-                    Text(
-                      _userProfile?.fullName ?? 'User', // Display fullName
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    // Username and Stars
+                    Column(
+                      children: [
+                        Text(
+                          _userProfile?.fullName ?? 'User',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.star, color: Colors.amber, size: 24),
+                            SizedBox(width: 5),
+                            Text(
+                              '${_userProfile?.stars ?? 0} Stars', // Display the user's stars
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.teal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
 
                     // Stars/Rating
-                    Row(
-                     
-                    ),
+                    
                     SizedBox(height: 30),
 
                     // Personal Information
