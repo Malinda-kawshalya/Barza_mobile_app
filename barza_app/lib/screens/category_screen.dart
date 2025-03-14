@@ -13,15 +13,27 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen> {
   final List<Map<String, String>> categories = [
     {"name": "Clothing", "image": "assets/category/category of Cloths.jpg"},
-    {"name": "Electronics", "image": "assets/category/category of electronic.png"},
+    {
+      "name": "Electronics",
+      "image": "assets/category/category of electronic.png"
+    },
     {"name": "Books", "image": "assets/category/category of books.png"},
     {"name": "Furniture", "image": "assets/category/category of furniture.png"},
     {"name": "Watches", "image": "assets/category/category of Watch.jpg"},
-    {"name": "Software licenses", "image": "assets/category/category of software.png"},
+    {
+      "name": "Software licenses",
+      "image": "assets/category/category of software.png"
+    },
     {"name": "Shoes", "image": "assets/category/category of shoes.png"},
-    {"name": "Art & Collectibles", "image": "assets/category/category of Art & Collectibles.png"},
+    {
+      "name": "Art & Collectibles",
+      "image": "assets/category/category of Art & Collectibles.png"
+    },
     {"name": "Toys", "image": "assets/category/category of Toys.png"},
-    {"name": "Gym Equipment", "image": "assets/category/category of Gym Equipment.png"},
+    {
+      "name": "Gym Equipment",
+      "image": "assets/category/category of Gym Equipment.png"
+    },
   ];
 
   late List<Map<String, String>> filteredCategories;
@@ -54,7 +66,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SpecificCategoryItemsScreen(category: categoryName)),
+          builder: (context) =>
+              SpecificCategoryItemsScreen(category: categoryName)),
     );
   }
 
@@ -62,7 +75,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -79,10 +92,9 @@ backgroundColor: Colors.white,
           ),
         ),
         centerTitle: true,
-      ),  
-        
+      ),
       body: Padding(
-  padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -134,7 +146,7 @@ backgroundColor: Colors.white,
   }
 
   void _navigateToPage(BuildContext context, int index) {
-String routeName = '';
+    String routeName = '';
 
     if (index == 0) {
       routeName = '/home';
@@ -145,7 +157,7 @@ String routeName = '';
     } else if (index == 3) {
       routeName = '/allitems';
     } else if (index == 4) {
-      routeName = '/userprofile';
+      routeName = '/profile';
     }
 
     if (ModalRoute.of(context)?.settings.name != routeName) {
@@ -164,11 +176,13 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // ... (Your CategoryCard widget remains the same)
     return ClipRRect(
-borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(10),
       child: Stack(
         children: [
           Image.asset(imageUrl,
-              width: double.infinity, height: double.infinity, fit: BoxFit.cover),
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover),
           Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(8),

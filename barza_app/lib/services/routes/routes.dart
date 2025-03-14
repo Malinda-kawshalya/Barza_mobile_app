@@ -15,6 +15,7 @@ import '/screens/buy_starts_page.dart';
 import '/screens/chatList_screen.dart';
 import '/screens/call_now_page.dart';
 import '/screens/send_email.dart';  
+import '/screens/profile.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -22,6 +23,7 @@ class AppRoutes {
   static const String home = '/home';
   static const String additem = '/additem';
   static const String userprofile = '/userprofile';
+  static const String profile = '/profile';
   static const String category = '/category';
   static const String wishlist = '/wishlist';
   static const String cart = '/cart';
@@ -42,6 +44,7 @@ class AppRoutes {
     home: (context) => HomeScreen(),
     additem: (context) => AddItemScreen(),
     userprofile: (context) => UserProfileScreen(),
+    profile: (context) => ProfileScreen(),
     category: (context) => CategoryScreen(),
     settings: (context) => SettingsPage(),
     notification: (context) => NotificationsScreen(),
