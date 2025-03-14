@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('confirmed_items')
           .orderBy('confirmedAt', descending: true)
+          .limit(8) // Limit the number of items fetched to 8
           .get();
 
       List<ConfirmedItem> items =
@@ -225,7 +226,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         childAspectRatio: 0.68,
                         crossAxisCount: 2,
                         padding: EdgeInsets.all(10),
-                        children: _filteredItems.map((item) {
+                        children: _filteredItems.take(8).map((item) {
+                          // Limit the displayed items to 8
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
