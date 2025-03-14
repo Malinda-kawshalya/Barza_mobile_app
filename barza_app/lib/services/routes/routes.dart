@@ -16,6 +16,7 @@ import '/screens/chatList_screen.dart';
 import '/screens/call_now_page.dart';
 import '/screens/send_email.dart';
 import '/screens/profile.dart';
+import '/screens/listing_screen.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -37,6 +38,7 @@ class AppRoutes {
   static const String chatlist = '/chatlist';
   static const String callnow = '/callnow';
   static const String sendemail = '/sendemail';
+  static const String listing = '/listing';
 
   static Map<String, WidgetBuilder> routes = {
     login: (context) => LoginPage(),
@@ -44,6 +46,7 @@ class AppRoutes {
     home: (context) => HomeScreen(),
     additem: (context) => AddItemScreen(),
     userprofile: (context) => UserProfileScreen(),
+    listing: (context) => UserListingsScreen(),
     profile: (context) => ProfileScreen(),
     category: (context) => CategoryScreen(),
     settings: (context) => SettingsPage(),

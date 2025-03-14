@@ -7,6 +7,7 @@ import 'dart:io';
 import './buy_starts_page.dart'; // Import the BuyStarsPage
 import '../widgets/bottom_navigationbar.dart';
 import 'user_profile.dart'; // Import the UserProfileScreen
+import 'listing_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -87,48 +88,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UserProfileScreen(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                _userProfile?.fullName ??
-                                    'User', // Display fullName
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              _userProfile?.email ?? 'xxx@gmail.com',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            // Rating stars
-                            Row(
-                              children: List.generate(10, (index) {
-                                return Icon(
-                                  index < _ratingStars
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                  color: Colors.amber,
-                                );
-                              }),
-                            ),
-                          ],
-                        ),
                         Container(
                           width: 100,
                           height: 100,
@@ -148,6 +107,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     size: 80,
                                     color: Colors.pink,
                                   ),
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UserProfileScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  _userProfile?.fullName ??
+                                      'User', // Display fullName
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                _userProfile?.email ?? 'xxx@gmail.com',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UserProfileScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Edit Profile',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.teal,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              // Rating stars
+                              Row(
+                                children: List.generate(10, (index) {
+                                  return Icon(
+                                    index < _ratingStars
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: Colors.amber,
+                                  );
+                                }),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -178,11 +201,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Icons.swap_horiz,
                           Colors.teal,
                         ),
-                        _buildProfileOption(
-                          context,
-                          'Listings',
-                          Icons.list,
-                          Colors.teal,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UserListingsScreen(),
+                              ),
+                            );
+                          },
+                          child: _buildProfileOption(
+                            context,
+                            'Listings',
+                            Icons.list,
+                            Colors.teal,
+                          ),
                         ),
                       ],
                     ),
@@ -335,7 +368,7 @@ void _navigateToPage(BuildContext context, int index) {
   } else if (index == 3) {
     routeName = '/allitems';
   } else if (index == 4) {
-    routeName = '/userprofile';
+    routeName = '/profile';
   }
 
   if (ModalRoute.of(context)?.settings.name != routeName) {
