@@ -95,7 +95,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Colors.teal),
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/home');
+            Navigator.of(context).pushReplacementNamed('/profile');
           },
         ),
         actions: [
@@ -356,7 +356,7 @@ void _navigateToPage(BuildContext context, int index) {
   } else if (index == 3) {
     routeName = '/allitems';
   } else if (index == 4) {
-    routeName = '/userprofile';
+    routeName = '/profile';
   }
 
   if (ModalRoute.of(context)?.settings.name != routeName) {
