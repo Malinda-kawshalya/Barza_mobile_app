@@ -9,6 +9,7 @@ import 'category_screen.dart';
 import 'all_item_screen.dart';
 import '../models/confirmed_item_model.dart';
 import 'item_Detail_Screen.dart' show ItemDetailScreen;
+import 'category_items_screen.dart'; // Import the new screen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -89,6 +90,16 @@ class _HomeScreenState extends State<HomeScreen> {
     if (ModalRoute.of(context)?.settings.name != routeName) {
       Navigator.pushReplacementNamed(context, routeName);
     }
+  }
+
+  void _onCategoryTap(String categoryName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            SpecificCategoryItemsScreen(category: categoryName),
+      ),
+    );
   }
 
   @override
@@ -179,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                Category(),
+                Category(onCategoryTap: _onCategoryTap), // Pass the callback
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
