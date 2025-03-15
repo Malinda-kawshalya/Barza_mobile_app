@@ -23,7 +23,7 @@ class Category extends StatelessWidget {
           _buildCategoryItem(context, 'assets/images/toys.png', 'Toys'),
           _buildCategoryItem(
               context, 'assets/images/accessories.png', 'Accessories'),
-          _buildCategoryItem(context, 'assets/images/others.png', 'Others'),
+          /*_buildCategoryItem(context, 'assets/images/others.png', 'Others'),*/
         ],
       ),
     );
