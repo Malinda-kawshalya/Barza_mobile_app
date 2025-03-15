@@ -138,7 +138,7 @@ class _ItemsState extends State<Items> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              "Rating: ${item.rating.toString()} ⭐",
+                              " ${item.rating.toString()} ⭐",
                               style: TextStyle(
                                 color: Colors.grey[600],
                                 fontSize: 12,

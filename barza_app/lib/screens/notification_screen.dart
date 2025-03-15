@@ -109,7 +109,7 @@ class NotificationsScreen extends StatelessWidget {
         return Icons.swap_horiz;
       case 'exchange_accepted':
         return Icons.check_circle_outline;
-      case 'new_message':
+      case 'new_chat':
         return Icons.message_outlined;
       default:
         return Icons.notifications_outlined;
@@ -122,7 +122,7 @@ class NotificationsScreen extends StatelessWidget {
         return Colors.blue;
       case 'exchange_accepted':
         return Colors.green;
-      case 'new_message':
+      case 'new_chat':
         return Colors.orange;
       default:
         return Colors.grey;
