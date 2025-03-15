@@ -7,7 +7,7 @@ import 'dart:io';
 import './buy_starts_page.dart'; // Import the BuyStarsPage
 import '../widgets/bottom_navigationbar.dart';
 import 'user_profile.dart'; // Import the UserProfileScreen
-import 'listing_screen.dart';
+import 'listing_screen.dart'; // Import the UserListingsScreen
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -182,11 +182,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     SizedBox(height: 30),
 
-                    // Total Exchanges
+                    // Total Listings
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Total Exchanges >',
+                        'Total Listings >',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -196,93 +196,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     SizedBox(height: 10),
 
-                    // Exchanges and Listings
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildProfileOption(
-                          context,
-                          'Exchanges',
-                          Icons.swap_horiz,
-                          Colors.teal,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UserListingsScreen(),
-                              ),
-                            );
-                          },
-                          child: _buildProfileOption(
+                    // Exchanges and Listings in a white box
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildProfileOption(
                             context,
-                            'Listings',
-                            Icons.list,
+                            'Exchanges',
+                            Icons.swap_horiz,
                             Colors.teal,
                           ),
-                        ),
-                      ],
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UserListingsScreen(),
+                                ),
+                              );
+                            },
+                            child: _buildProfileOption(
+                              context,
+                              'Listings',
+                              Icons.list,
+                              Colors.teal,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 20),
 
-                    // History, Wish List, Coupons, Cards
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildProfileOption(
-                          context,
-                          'History',
-                          Icons.history,
-                          Colors.teal,
-                        ),
-                        _buildProfileOption(
-                          context,
-                          'Wish List',
-                          Icons.favorite_border,
-                          Colors.teal,
-                        ),
-                        _buildProfileOption(
-                          context,
-                          'Coupons',
-                          Icons.card_giftcard,
-                          Colors.teal,
-                        ),
-                        _buildProfileOption(
-                          context,
-                          'Cards',
-                          Icons.credit_card,
-                          Colors.teal,
-                        ),
-                      ],
+                    // History, Wish List, Coupons, Cards in a white box
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildProfileOption(
+                            context,
+                            'History',
+                            Icons.history,
+                            Colors.teal,
+                          ),
+                          _buildProfileOption(
+                            context,
+                            'Wish List',
+                            Icons.favorite_border,
+                            Colors.teal,
+                          ),
+                          _buildProfileOption(
+                            context,
+                            'Coupons',
+                            Icons.card_giftcard,
+                            Colors.teal,
+                          ),
+                          _buildProfileOption(
+                            context,
+                            'Cards',
+                            Icons.credit_card,
+                            Colors.teal,
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 20),
 
                     // Buy More Stars Button
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BuyStarsPage(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'BUY MORE STARS >',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BuyStarsPage(),
                           ),
+                        );
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xFF00C6FB),
+                              Color.fromARGB(255, 138, 175, 234)
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(25),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.teal,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
+                        child: Center(
+                          child: Text(
+                            'BUY MORE STARS >',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -292,24 +313,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Help Center
                     Container(
                       width: double.infinity,
-                      height: 50,
+                      height: 100,
                       child: ElevatedButton(
                         onPressed: () {
                           // Navigate to Help Center
                         },
-                        child: Text(
-                          'Help Center\nNeed Help? Talk to us',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        child: Text(
+                          'Help Center\nNeed Help? Talk to us',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),

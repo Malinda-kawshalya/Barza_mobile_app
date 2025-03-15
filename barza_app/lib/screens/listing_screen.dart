@@ -25,10 +25,31 @@ class _UserListingsScreenState extends State<UserListingsScreen> {
           .where('userId', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
           .get();
 
-      return snapshot.docs.map((doc) => ConfirmedItem.fromFirestore(doc)).toList();
+      return snapshot.docs
+          .map((doc) => ConfirmedItem.fromFirestore(doc))
+          .toList();
     } catch (e) {
       print("Error fetching listings: $e");
       return [];
+    }
+  }
+
+  Future<void> _deleteListing(String itemId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('confirmed_items')
+          .doc(itemId)
+          .delete();
+      setState(() {
+        _listingsFuture = _fetchUserListings(); // Refresh the listings
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Listing deleted successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error deleting listing: $e')),
+      );
     }
   }
 
@@ -45,7 +66,8 @@ class _UserListingsScreenState extends State<UserListingsScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Failed to load listings: ${snapshot.error}'));
+            return Center(
+                child: Text('Failed to load listings: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             return GridView.count(
               crossAxisCount: 2,
@@ -56,7 +78,8 @@ class _UserListingsScreenState extends State<UserListingsScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ItemDetailScreen(itemId: item.id!),
+                        builder: (context) =>
+                            ItemDetailScreen(itemId: item.id!),
                       ),
                     );
                   },
@@ -82,7 +105,14 @@ class _UserListingsScreenState extends State<UserListingsScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(Icons.favorite_border, color: Colors.red, size: 18),
+                              Icon(Icons.favorite_border,
+                                  color: Colors.red, size: 18),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  _deleteListing(item.id!);
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -99,7 +129,8 @@ class _UserListingsScreenState extends State<UserListingsScreen> {
                                 : Container(
                                     height: 100,
                                     color: Colors.grey[300],
-                                    child: Icon(Icons.image, size: 50, color: Colors.grey[600]),
+                                    child: Icon(Icons.image,
+                                        size: 50, color: Colors.grey[600]),
                                   ),
                           ),
                         ),
