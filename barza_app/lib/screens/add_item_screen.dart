@@ -186,6 +186,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+        ),
         title: Text('Add Barter Item',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         centerTitle: true,
@@ -425,7 +431,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: accentColor,
-                                padding: EdgeInsets.symmetric(vertical: 12),
+                                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),

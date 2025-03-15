@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../widgets/home_appbar.dart';
 import '../widgets/category.dart';
-import '../widgets/items.dart';
 import '../widgets/bottom_navigationbar.dart';
 import '../widgets/menu.dart';
 import 'category_screen.dart';
 import 'all_item_screen.dart';
 import '../models/confirmed_item_model.dart';
 import 'item_Detail_Screen.dart' show ItemDetailScreen;
+import 'category_items_screen.dart'; // Import the new screen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -91,9 +91,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _onCategoryTap(String categoryName) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            SpecificCategoryItemsScreen(category: categoryName),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 218, 230, 229),
+
       appBar: HomeAppbar.buildHomeAppbar(context),
       drawer: MenuWidget(), // Add the MenuWidget as the drawer
 
@@ -153,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -179,10 +191,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                Category(),
+                Category(onCategoryTap: _onCategoryTap), // Pass the callback
                 Container(
                   alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -256,21 +268,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.favorite_border,
-                                            color: Colors.red, size: 18),
-                                      ],
-                                    ),
-                                  ),
+                                  
                                   Expanded(
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.vertical(
-                                          top: Radius.zero,
+                                          top: Radius.circular(15),
                                           bottom: Radius.circular(15)),
                                       child: item.images.isNotEmpty
                                           ? Image.network(
@@ -314,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
-                                          "Rating: ${item.rating.toString()} ⭐",
+                                          "${item.rating.toString()} ⭐",
                                           style: TextStyle(
                                             color: Colors.grey[600],
                                             fontSize: 12,

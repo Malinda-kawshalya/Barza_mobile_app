@@ -160,16 +160,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               SizedBox(height: 10),
                               // Rating stars
-                              Row(
-                                children: List.generate(10, (index) {
-                                  return Icon(
-                                    index < _ratingStars
-                                        ? Icons.star
-                                        : Icons.star_border,
-                                    color: Colors.amber,
-                                  );
-                                }),
+                               Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.star, color: Colors.amber, size: 24),
+                            SizedBox(width: 5),
+                            Text(
+                              '${_userProfile?.stars ?? 0} Stars', // Display the user's stars
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.teal,
                               ),
+                            ),
+                          ],
+                        ),
                             ],
                           ),
                         ),

@@ -119,9 +119,7 @@ exports.onChatCreated = onDocumentCreated(
     await admin.firestore().collection("notifications").add({
       userId: recipientUserId,
       type: "new_chat",
-      message: `${senderName} sent you a message:
-       "${firstMessage.message.substring(0, 50)}
-       ${firstMessage.message.length > 50 ? "..." : ""}"`,
+      message: `${senderName} sent you a message:`,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
       read: false,
       senderId: senderUserId,

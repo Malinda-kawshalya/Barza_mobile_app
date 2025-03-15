@@ -87,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
         .collection('messages')
         .add({
       'senderId': currentUserId,
-      'text': mediaUrl == null ? messageText : '',
+      'message': mediaUrl == null ? messageText : '',
       'timestamp': FieldValue.serverTimestamp(),
       'mediaUrl': mediaUrl,
     });
@@ -168,7 +168,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     .containsKey('mediaUrl') &&
                                 message['mediaUrl'] != null
                             ? Image.network(message['mediaUrl'], width: 200)
-                            : Text(message['text']),
+                            : Text(message['message']),
                       ),
                     );
                   },

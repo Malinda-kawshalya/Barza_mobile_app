@@ -86,32 +86,72 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 218, 230, 229),
       appBar: AppBar(
+         shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25),
+          bottomRight: Radius.circular(25),
+        ),
+      ),
+      backgroundColor: const Color(0xFF0C969C),
+        elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pushReplacementNamed('/home'),
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/home');
+          },
         ),
         title: Text(
           'All Items',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Color(0xFF0C969C),
+        centerTitle: true,
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search for items...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+          SizedBox(height: 15,),
+          Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: "Search for items",
+                            hintStyle: TextStyle(
+                              color: const Color.fromARGB(255, 170, 167, 167),
+                            ),
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                          ),
+                          
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // This allows tapping the search icon to clear focus
+                          FocusScope.of(context).unfocus();
+                        },
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-          ),
           Expanded(
             child: FutureBuilder<List<ConfirmedItem>>(
               future: _itemsFuture,
@@ -155,21 +195,11 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(Icons.favorite_border,
-                                        color: Colors.red, size: 18),
-                                  ],
-                                ),
-                              ),
+                              
                               Expanded(
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.vertical(
-                                      top: Radius.zero,
+                                      top: Radius.circular(15),
                                       bottom: Radius.circular(15)),
                                   child: item.images.isNotEmpty
                                       ? Image.network(
@@ -211,7 +241,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
-                                      "Rating: ${item.rating.toString()} ⭐",
+                                      "${item.rating.toString()} ⭐",
                                       style: TextStyle(
                                         color: Colors.grey[600],
                                         fontSize: 12,

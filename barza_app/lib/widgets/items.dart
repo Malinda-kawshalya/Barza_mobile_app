@@ -88,18 +88,10 @@ class _ItemsState extends State<Items> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(Icons.favorite_border, color: Colors.red, size: 18),
-                          ],
-                        ),
-                      ),
+                      
                       Expanded(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.vertical(top: Radius.zero, bottom: Radius.circular(15)),
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(15), bottom: Radius.circular(15)),
                           child: item.images.isNotEmpty
                               ? Image.network(
                                   item.images[0],
@@ -138,7 +130,7 @@ class _ItemsState extends State<Items> {
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
-                              "Rating: ${item.rating.toString()} ⭐",
+                              " ${item.rating.toString()} ⭐",
                               style: TextStyle(
                                 color: Colors.grey[600],
                                 fontSize: 12,

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Category extends StatelessWidget {
+  final Function(String) onCategoryTap;
+
+  Category({required this.onCategoryTap});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -9,14 +13,17 @@ class Category extends StatelessWidget {
           EdgeInsets.symmetric(horizontal: 10), // Add padding to the whole row
       child: Row(
         children: [
-          _buildCategoryItem(context, 'assets/images/electronics.png', 'Electronics'),
+          _buildCategoryItem(
+              context, 'assets/images/electronics.png', 'Electronics'),
           _buildCategoryItem(context, 'assets/images/cloths.png', 'Clothing'),
           _buildCategoryItem(context, 'assets/images/books.png', 'Books'),
-          _buildCategoryItem(context, 'assets/images/furnitures.png', 'Furniture'),
+          _buildCategoryItem(
+              context, 'assets/images/furnitures.png', 'Furniture'),
           _buildCategoryItem(context, 'assets/images/sports.png', 'Sports'),
           _buildCategoryItem(context, 'assets/images/toys.png', 'Toys'),
-          _buildCategoryItem(context, 'assets/images/accessories.png', 'Accessories'),
-          _buildCategoryItem(context, 'assets/images/others.png', 'Others'),
+          _buildCategoryItem(
+              context, 'assets/images/accessories.png', 'Accessories'),
+          /*_buildCategoryItem(context, 'assets/images/others.png', 'Others'),*/
         ],
       ),
     );
@@ -43,8 +50,8 @@ class Category extends StatelessWidget {
       child: InkWell(
         // Make the container tappable
         onTap: () {
-          // Handle category tap (e.g., navigate to category screen)
-          print('Tapped on $categoryName');
+          onCategoryTap(
+              categoryName); // Use the callback to handle category tap
         },
         child: Padding(
           padding:

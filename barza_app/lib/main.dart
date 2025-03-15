@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:barza_app/services/routes/routes.dart';
+import 'package:barza_app/screens/loading_page.dart'; // Import the loading page
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,8 +18,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xFF0C969C),
       ),
-      initialRoute: AppRoutes.login,
-      routes: AppRoutes.routes,
+      initialRoute: '/loading', // Set initial route to loading page
+      routes: {
+        '/loading': (context) => LoadingPage(), // Define loading page route
+        ...AppRoutes.routes, // Include existing routes
+      },
     );
   }
 }

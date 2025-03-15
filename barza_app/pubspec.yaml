@@ -75,6 +75,7 @@ flutter:
     - assets/images/toys.png
     - assets/images/accessories.png
     - assets/images/others.png
+    - assets/category/logo.png
     - assets/category/category of Cloths.jpg
     - assets/category/category of electronic.png
     - assets/category/category of books.png
