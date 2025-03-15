@@ -11,7 +11,7 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 5), () {
       Navigator.pushReplacementNamed(context, AppRoutes.login);
     });
   }
@@ -24,7 +24,14 @@ class _LoadingPageState extends State<LoadingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/category/logo.png'),
+            ClipOval(
+              child: Image.asset(
+                'assets/category/donation.gif',
+                width: 171,
+                height: 171,
+                fit: BoxFit.cover,
+              ),
+            ),
             SizedBox(height: 20),
             CircularProgressIndicator(),
           ],
