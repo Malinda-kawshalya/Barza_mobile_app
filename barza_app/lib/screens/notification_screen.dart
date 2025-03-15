@@ -39,9 +39,26 @@ class NotificationsScreen extends StatelessWidget {
       return Center(child: Text("Please login"));
     }
     return Scaffold(
+      backgroundColor: Colors.white,
+
       appBar: AppBar(
-        title: Text("Notifications"),
-        backgroundColor: Color(0xFF0C969C),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+        ),
+        title: Text('Notificatios',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        centerTitle: true,
+      backgroundColor: const Color(0xFF0C969C),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: const Color.fromARGB(255, 0, 0, 0)),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed('/home');
+          },
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance

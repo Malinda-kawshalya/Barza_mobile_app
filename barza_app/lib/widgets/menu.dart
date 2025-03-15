@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 
 class MenuWidget extends StatelessWidget {
   const MenuWidget({Key? key}) : super(key: key);
@@ -18,14 +19,14 @@ class MenuWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'BarZar Menu',
+                  'BarZar',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
                   ),
                 ),
                 Text(
-                  'Welcome!',
+                  'Welcome! ',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -85,10 +86,19 @@ class MenuWidget extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Logout'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/login');
-              // Implement logout functionality
+            onTap: () async {
+              Navigator.pop(context); // Close the current drawer or screen
+
+              // Implement logout functionality by calling the imported top-level function
+              try {
+                await AuthService().signOut(); // Create an instance to call the method
+                Navigator.pushReplacementNamed(context, '/login'); // Navigate to login screen
+              } catch (e) {
+                print("Error signing out: $e");
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error during logout. Please try again.')),
+                );
+              }
             },
           ),
         ],

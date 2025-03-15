@@ -1,5 +1,6 @@
 // categories_screen.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/src/painting/border_radius.dart';
 import '../widgets/bottom_navigationbar.dart';
 import 'category_items_screen.dart'; // Import the new screen
 
@@ -8,6 +9,7 @@ class CategoryScreen extends StatefulWidget {
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
+  
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
@@ -74,8 +76,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 218, 230, 229),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+         shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25),
+          bottomRight: Radius.circular(25),
+        ),
+      ),
+      backgroundColor: const Color(0xFF0C969C),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -86,7 +95,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         title: Text(
           'Category',
           style: TextStyle(
-            color: Colors.teal,
+            color: Colors.white,
             fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
@@ -96,31 +105,55 @@ class _CategoryScreenState extends State<CategoryScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Find Any Category',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                hintText: 'Search more Category ...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+            Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            hintText: "Search for items",
+                            hintStyle: TextStyle(
+                              color: const Color.fromARGB(255, 170, 167, 167),
+                            ),
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                          ),
+                          
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // This allows tapping the search icon to clear focus
+                          FocusScope.of(context).unfocus();
+                        },
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 20),
+            
+            SizedBox(height: 15),
             Expanded(
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.9,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
+                  childAspectRatio: 0.8,
                 ),
                 itemCount: filteredCategories.length,
                 itemBuilder: (context, index) {
