@@ -39,6 +39,7 @@ dependencies:
   location: ^5.0.3
   firebase_storage: ^12.4.4
   intl: ^0.20.2
+  sqflite: ^2.0.0+4
   path: ^1.9.0
   flutter_animate: ^4.5.2
   cached_network_image: ^3.4.1
@@ -80,14 +81,12 @@ flutter:
     - assets/category/category of electronic.png
     - assets/category/category of books.png
     - assets/category/category of furniture.png
-    - assets/category/category of Watch.jpg
+    - assets/category/category of Sport.png
     - assets/category/category of software.png
-    - assets/category/category of shoes.png
+    - assets/category/category of Accessories.png
     - assets/category/category of Art & Collectibles.png
     - assets/category/category of Toys.png
     - assets/category/category of Gym Equipment.png
-    - assets/category/category of Sports.png
-    - assets/category/category of Accessories.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

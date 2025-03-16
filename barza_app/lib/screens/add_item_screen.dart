@@ -51,9 +51,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
     'Electronics',
     'Books',
     'Furniture',
-    'Watches',
+    'Sports Items',
     'Software Licenses',
-    'Shoes',
+    'Accessories',
     'Art & Collectibles',
     'Toys',
     'Gym Equipment'
