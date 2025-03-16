@@ -9,7 +9,6 @@ class CategoryScreen extends StatefulWidget {
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
-  
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
@@ -21,12 +20,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
     },
     {"name": "Books", "image": "assets/category/category of books.png"},
     {"name": "Furniture", "image": "assets/category/category of furniture.png"},
-    {"name": "Watches", "image": "assets/category/category of Watch.jpg"},
+    {"name": "Sports Items", "image": "assets/category/category of Sport.png"},
     {
       "name": "Software licenses",
       "image": "assets/category/category of software.png"
     },
-    {"name": "Shoes", "image": "assets/category/category of shoes.png"},
+    {
+      "name": "Accessories",
+      "image": "assets/category/category of Accessories.png"
+    },
     {
       "name": "Art & Collectibles",
       "image": "assets/category/category of Art & Collectibles.png"
@@ -78,13 +80,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 218, 230, 229),
       appBar: AppBar(
-         shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(25),
-          bottomRight: Radius.circular(25),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
         ),
-      ),
-      backgroundColor: const Color(0xFF0C969C),
+        backgroundColor: const Color(0xFF0C969C),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -105,47 +107,44 @@ class _CategoryScreenState extends State<CategoryScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5),
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            hintText: "Search for items",
-                            hintStyle: TextStyle(
-                              color: const Color.fromARGB(255, 170, 167, 167),
-                            ),
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                          ),
-                          
+              margin: EdgeInsets.symmetric(horizontal: 5),
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              height: 50,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        hintText: "Search for items",
+                        hintStyle: TextStyle(
+                          color: const Color.fromARGB(255, 170, 167, 167),
                         ),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          // This allows tapping the search icon to clear focus
-                          FocusScope.of(context).unfocus();
-                        },
-                        child: Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-            
+                  GestureDetector(
+                    onTap: () {
+                      // This allows tapping the search icon to clear focus
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 15),
             Expanded(
               child: GridView.builder(
@@ -207,15 +206,28 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ... (Your CategoryCard widget remains the same)
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Stack(
         children: [
-          Image.asset(imageUrl,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover),
+          Image.asset(
+            imageUrl,
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey,
+                child: Center(
+                  child: Icon(
+                    Icons.broken_image,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                ),
+              );
+            },
+          ),
           Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(8),
