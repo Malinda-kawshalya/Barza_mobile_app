@@ -41,7 +41,7 @@ class _UserListingsScreenState extends State<UserListingsScreen> {
           .doc(itemId)
           .delete();
       setState(() {
-        _listingsFuture = _fetchUserListings(); // Refresh the listings
+        _listingsFuture = _fetchUserListings();
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Listing deleted successfully')),
@@ -56,9 +56,25 @@ class _UserListingsScreenState extends State<UserListingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFE0F2F1),
       appBar: AppBar(
-        title: Text('My Listings'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
         backgroundColor: Color(0xFF0C969C),
+        elevation: 0,
+        title: Text(
+          'My Listings',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: FutureBuilder<List<ConfirmedItem>>(
         future: _listingsFuture,
@@ -66,118 +82,130 @@ class _UserListingsScreenState extends State<UserListingsScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(
-                child: Text('Failed to load listings: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            return GridView.count(
-              crossAxisCount: 2,
-              padding: EdgeInsets.all(10),
-              children: snapshot.data!.map((item) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ItemDetailScreen(itemId: item.id!),
+            return Center(child: Text('Failed to load listings: ${snapshot.error}'));
+          } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.75,
+                ),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  final item = snapshot.data![index];
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ItemDetailScreen(itemId: item.id!),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: Offset(2, 4),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.8),
-                          spreadRadius: 1,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Stack(
                             children: [
-                              Icon(Icons.favorite_border,
-                                  color: Colors.red, size: 18),
-                              IconButton(
-                                icon: Icon(Icons.delete, color: Colors.red),
-                                onPressed: () {
-                                  _deleteListing(item.id!);
-                                },
+                              ClipRRect(
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(15), bottom: Radius.circular(15)),
+                                child: item.images.isNotEmpty
+                                    ? Image.network(
+                                        item.images[0],
+                                        width: double.infinity,
+                                        height: 120,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Container(
+                                        height: 120,
+                                        color: Colors.grey[300],
+                                        child: Center(
+                                          child: Icon(Icons.image, size: 50, color: Colors.grey[600]),
+                                        ),
+                                      ),
                               ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.vertical(
-                                top: Radius.zero, bottom: Radius.circular(15)),
-                            child: item.images.isNotEmpty
-                                ? Image.network(
-                                    item.images[0],
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Container(
-                                    height: 100,
-                                    color: Colors.grey[300],
-                                    child: Icon(Icons.image,
-                                        size: 50, color: Colors.grey[600]),
+                              Positioned(
+                                right: 10,
+                                top: 10,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white.withOpacity(0.8),
+                                  child: IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () => _deleteListing(item.id!),
                                   ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.itemName,
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 2, 42, 44),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                item.category,
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 12,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                "Rating: ${item.rating.toString()} ⭐",
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 12,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.itemName,
+                                  style: TextStyle(
+                                    color: Color(0xFF023A3C),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  item.category,
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 12,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(Icons.star, color: Colors.amber, size: 16),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      item.rating.toString(),
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                },
+              ),
             );
           } else {
-            return Center(child: Text('No listings available'));
+            return Center(child: Text('No listings available', style: TextStyle(fontSize: 16)));
           }
         },
       ),

@@ -129,8 +129,22 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Chat")),
-      body: Column(
+ backgroundColor: Colors.white,
+
+      appBar: AppBar(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+        ),
+        title: Text('chat',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        centerTitle: true,
+      backgroundColor: const Color(0xFF0C969C),
+        elevation: 0,
+       
+      ),      body: Column(
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
