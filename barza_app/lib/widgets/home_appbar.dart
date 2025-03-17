@@ -32,7 +32,7 @@ class HomeAppbar {
       leading: Builder(
         builder: (BuildContext context) {
           return IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black, size: 30),
+            icon: const Icon(Icons.sort, color: Colors.black, size: 30),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
