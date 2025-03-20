@@ -26,7 +26,13 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+        ),
+        backgroundColor: const Color(0xFF0C969C),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -38,8 +44,8 @@ class SettingsPage extends StatelessWidget {
         title: const Text(
           'Settings',
           style: TextStyle(
-            color: Colors.teal,
-            fontSize: 24,
+            color: Colors.white,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -48,7 +54,7 @@ class SettingsPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.black),
             onPressed: () {
-            Navigator.pushReplacementNamed(context, '/notifications');
+              Navigator.pushReplacementNamed(context, '/notifications');
             },
           ),
         ],

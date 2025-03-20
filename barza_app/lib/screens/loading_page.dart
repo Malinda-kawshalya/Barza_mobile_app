@@ -11,7 +11,7 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 8), () {
       Navigator.pushReplacementNamed(context, AppRoutes.login);
     });
   }

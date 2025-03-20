@@ -14,9 +14,31 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 218, 230, 229),
       appBar: AppBar(
-        title: Text("Exchange Request Details"),
-        backgroundColor: Color(0xFF0C969C),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+          ),
+        ),
+        backgroundColor: const Color(0xFF0C969C),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/home');
+          },
+        ),
+        title: Text(
+          'Exchange Request Details',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
@@ -40,20 +62,23 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildSectionTitle("Requested Item"),
-                _buildItemDetails(exchangeRequest.requestedItemId),
-                SizedBox(height: 16),
-                _buildSectionTitle("Offered Item"),
-                exchangeRequest.offeredItemId != null
-                    ? _buildItemDetails(exchangeRequest.offeredItemId!)
-                    : Text("No item was offered in exchange",
-                        style: TextStyle(fontStyle: FontStyle.italic)),
-                SizedBox(height: 24),
-                _buildStatusAndActions(context, exchangeRequest),
-              ],
+            child: SingleChildScrollView(
+              // Added SingleChildScrollView
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionTitle("Requested Item"),
+                  _buildItemDetails(exchangeRequest.requestedItemId),
+                  SizedBox(height: 16),
+                  _buildSectionTitle("Offered Item"),
+                  exchangeRequest.offeredItemId != null
+                      ? _buildItemDetails(exchangeRequest.offeredItemId!)
+                      : Text("No item was offered in exchange",
+                          style: TextStyle(fontStyle: FontStyle.italic)),
+                  SizedBox(height: 24),
+                  _buildStatusAndActions(context, exchangeRequest),
+                ],
+              ),
             ),
           );
         },
@@ -164,11 +189,13 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
         ElevatedButton.icon(
           onPressed: () => _startChat(context, exchangeRequest),
           icon: Icon(Icons.chat, color: Colors.white),
-          label: Text("Chat with ${_getChatButtonText(exchangeRequest, currentUser)}"),
+          label: Text(
+              "Chat with ${_getChatButtonText(exchangeRequest, currentUser)}"),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.teal,
             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
       ],
@@ -274,19 +301,20 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
   }
 
   Future<void> _updateUserStars(String userId, num starDifference) async {
-    final userDocRef = FirebaseFirestore.instance.collection('users').doc(userId);
-    
+    final userDocRef =
+        FirebaseFirestore.instance.collection('users').doc(userId);
+
     try {
       // Get the current user data
       final userDoc = await userDocRef.get();
-      
+
       if (userDoc.exists) {
         final userData = userDoc.data() as Map<String, dynamic>;
         final currentStars = userData['stars'] as num? ?? 3;
-        
+
         // Calculate new stars
         final newStars = currentStars + starDifference;
-        
+
         // Update the user's stars
         await userDocRef.update({'stars': newStars});
       }
@@ -295,8 +323,8 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _logStarExchange(
-      String requestId, String requestingUserId, String itemOwnerId, num starDifference) async {
+  Future<void> _logStarExchange(String requestId, String requestingUserId,
+      String itemOwnerId, num starDifference) async {
     try {
       await FirebaseFirestore.instance.collection('star_exchanges').add({
         'requestId': requestId,
@@ -313,8 +341,8 @@ class ExchangeRequestDetailsScreen extends StatelessWidget {
   void _startChat(BuildContext context, ExchangeRequest request) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please log in to chat.')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Please log in to chat.')));
       return;
     }
 
