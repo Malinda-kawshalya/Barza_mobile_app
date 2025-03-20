@@ -16,7 +16,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final _userProfileService = UserProfileService();
   UserProfile? _userProfile;
   bool _isLoading = true;
+  Map<String, bool> _isEditing = {
+    'name': false,
+    'phone': false,
+    'address': false,
+    'location': false,
+  };
   int _ratingStars = 7; // Default rating
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
   @override
   void initState() {
@@ -30,6 +41,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       setState(() {
         _userProfile = profile;
         _isLoading = false;
+        _nameController.text = profile?.fullName ?? '';
+        _phoneController.text = profile?.phoneNumber ?? '';
+        _addressController.text = profile?.address ?? '';
+        _locationController.text = profile?.location ?? '';
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -82,6 +97,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  Future<void> _updateProfile() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      await _userProfileService.updateUserProfile(
+        fullName: _nameController.text,
+        phoneNumber: _phoneController.text,
+        address: _addressController.text,
+        location: _locationController.text,
+      );
+      _fetchUserProfile();
+      setState(() {
+        _isEditing = {
+          'name': false,
+          'phone': false,
+          'address': false,
+          'location': false,
+        };
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error updating profile: $e')),
+      );
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -160,16 +205,37 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                     SizedBox(height: 15),
 
-                    // Username
                     // Username and Stars
                     Column(
                       children: [
-                        Text(
-                          _userProfile?.fullName ?? 'User',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _isEditing['name']!
+                                ? Expanded(
+                                    child: TextField(
+                                      controller: _nameController,
+                                      decoration: InputDecoration(
+                                        hintText: 'Enter your name',
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    _userProfile?.fullName ?? 'User',
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                            IconButton(
+                              icon: Icon(Icons.edit, color: Colors.teal),
+                              onPressed: () {
+                                setState(() {
+                                  _isEditing['name'] = true;
+                                });
+                              },
+                            ),
+                          ],
                         ),
                         SizedBox(height: 5),
                         Row(
@@ -190,8 +256,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ],
                     ),
 
-                    // Stars/Rating
-
                     SizedBox(height: 30),
 
                     // Personal Information
@@ -200,25 +264,56 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       'Your Email',
                       _userProfile?.email ?? '',
                       Icons.email,
+                      editable: false,
                     ),
                     _buildInfoItem(
                       context,
                       'Phone Number',
-                      _userProfile?.phoneNumber ?? '',
+                      _phoneController.text,
                       Icons.phone,
+                      controller: _phoneController,
+                      editingKey: 'phone',
                     ),
                     _buildInfoItem(
                       context,
                       'Address',
-                      _userProfile?.address ?? '',
-                      Icons.email,
+                      _addressController.text,
+                      Icons.home,
+                      controller: _addressController,
+                      editingKey: 'address',
                     ),
                     _buildInfoItem(
                       context,
                       'Location',
-                      _userProfile?.location ?? '',
+                      _locationController.text,
                       Icons.location_on,
+                      controller: _locationController,
+                      editingKey: 'location',
                     ),
+
+                    // Update Button
+                    if (_isEditing.containsValue(true))
+                      Container(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: _updateProfile,
+                          child: Text(
+                            'Update',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.teal,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          ),
+                        ),
+                      ),
 
                     // Buy Stars Button
                     SizedBox(height: 20),
@@ -286,8 +381,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     BuildContext context,
     String title,
     String value,
-    IconData iconData,
-  ) {
+    IconData iconData, {
+    bool editable = true,
+    TextEditingController? controller,
+    String? editingKey,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -299,40 +397,63 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
         SizedBox(height: 8),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 36,
-                height: 36,
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.teal.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(
-                  iconData,
-                  color: Colors.teal,
-                  size: 20,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.teal.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        iconData,
+                        color: Colors.teal,
+                        size: 20,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: editable && _isEditing[editingKey]!
+                          ? TextField(
+                              controller: controller,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Enter $title',
+                              ),
+                            )
+                          : Text(
+                              value,
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontSize: 14,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    color: Colors.teal,
-                    fontSize: 14,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
+            ),
+            if (editable)
+              IconButton(
+                icon: Icon(Icons.edit, color: Colors.teal),
+                onPressed: () {
+                  setState(() {
+                    _isEditing[editingKey!] = true;
+                  });
+                },
               ),
-            ],
-          ),
+          ],
         ),
         SizedBox(height: 16),
       ],
