@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
-import 'call_now_page.dart'; // Import the CallPage
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart'; // Import the services package for clipboard
 import 'send_email.dart'; // Import the SendEmailPage
 
 class HelpCenterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+
+    Future<void> _launchDialer(String phoneNumber) async {
+      final Uri launchUri = Uri(
+        scheme: 'tel',
+        path: phoneNumber,
+      );
+      if (await canLaunch(launchUri.toString())) {
+        await launch(launchUri.toString());
+      } else {
+        throw 'Could not launch $phoneNumber';
+      }
+    }
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 238, 238), // Background color
@@ -41,14 +54,7 @@ class HelpCenterPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                "Help Center",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0C969C),
-                ),
-              ),
+              
               SizedBox(height: 20),
               Text(
                 "Need help?\nTalk to us!",
@@ -75,7 +81,7 @@ class HelpCenterPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CallPage()),
+                        MaterialPageRoute(builder: (context) => Placeholder()), // Replace with an existing class or define CallPage
                       );
                     },
                     style: ElevatedButton.styleFrom(
