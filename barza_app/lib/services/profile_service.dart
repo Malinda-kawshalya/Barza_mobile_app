@@ -36,10 +36,8 @@ class UserProfileService {
         return null;
       }
 
-      final doc = await _firestore
-          .collection('users')
-          .doc(currentUser.uid)
-          .get();
+      final doc =
+          await _firestore.collection('users').doc(currentUser.uid).get();
 
       return doc.exists ? UserProfile.fromFirestore(doc) : null;
     } catch (e) {
@@ -57,9 +55,8 @@ class UserProfileService {
       }
 
       final fileName = path.basename(imageFile.path);
-      final storageRef = _storage
-          .ref()
-          .child('profile_images/${currentUser.uid}/$fileName');
+      final storageRef =
+          _storage.ref().child('profile_images/${currentUser.uid}/$fileName');
 
       final UploadTask uploadTask = storageRef.putFile(imageFile);
       final TaskSnapshot snapshot = await uploadTask;
@@ -71,6 +68,31 @@ class UserProfileService {
           .update({'profileImageUrl': imageUrl});
     } catch (e) {
       print('Error updating profile photo: $e');
+      rethrow;
+    }
+  }
+
+  // Update user profile information
+  Future<void> updateUserProfile({
+    required String fullName,
+    required String phoneNumber,
+    required String address,
+    required String location,
+  }) async {
+    try {
+      final currentUser = _auth.currentUser;
+      if (currentUser == null) {
+        throw Exception('No authenticated user found');
+      }
+
+      await _firestore.collection('users').doc(currentUser.uid).update({
+        'fullName': fullName,
+        'phoneNumber': phoneNumber,
+        'address': address,
+        'location': location,
+      });
+    } catch (e) {
+      print('Error updating user profile: $e');
       rethrow;
     }
   }

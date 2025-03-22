@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Icon(Icons.star, color: Colors.amber, size: 24),
                             SizedBox(width: 5),
                             Text(
-                              '${_userProfile?.stars ?? 0} Stars', // Display the user's stars
+                              '${_userProfile?.stars ?? 0} Stars', 
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
